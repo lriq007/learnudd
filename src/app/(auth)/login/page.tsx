@@ -34,7 +34,7 @@ export default function LoginPage() {
 
       if (authError) {
         console.error('Login error:', authError);
-        const errorMsg = authError.message || authError.error_description || JSON.stringify(authError);
+        const errorMsg = authError.message || JSON.stringify(authError);
         setError(errorMsg.includes('Invalid') || errorMsg.includes('invalid')
           ? 'Correo o contraseña incorrectos'
           : errorMsg);
