@@ -1,0 +1,65 @@
+<app-header title="Mi biblioteca"></app-header>
+
+<ion-content class="library-content">
+  <div class="library-page">
+    <div class="library-tabs">
+      @for (tab of tabs; track tab) {
+        <button
+          type="button"
+          class="library-tabs__item"
+          [class.library-tabs__item--active]="activeTab() === tab"
+          (click)="setTab(tab)"
+        >
+          {{ tabLabels[tab] }}
+        </button>
+      }
+    </div>
+
+    @if (loading()) {
+      <div class="library-list">
+        @for (i of skeletonRows; track i) {
+          <app-skeleton height="6rem"></app-skeleton>
+        }
+      </div>
+    } @else if (filteredItems().length > 0) {
+      <div class="library-list">
+        @for (item of filteredItems(); track item.id) {
+          <app-card class="library-item">
+            <div class="library-item__thumb">
+              <ion-icon [icon]="bookIcon"></ion-icon>
+            </div>
+            <div class="library-item__body">
+              <h3 class="library-item__title">{{ item.note?.title || 'Apunte' }}</h3>
+              <p class="library-item__meta">{{ item.note?.course }} · {{ item.note?.author?.full_name }}</p>
+              <div class="library-item__footer">
+                <span class="library-item__date">Comprado {{ formatDate(item.purchased_at) }}</span>
+                @if (item.progress > 0) {
+                  <div class="library-item__progress">
+                    <div class="library-item__progress-track">
+                      <div class="library-item__progress-fill" [style.width.%]="item.progress"></div>
+                    </div>
+                    <span class="library-item__progress-value">{{ item.progress }}%</span>
+                  </div>
+                }
+              </div>
+            </div>
+            <button type="button" class="library-item__open" aria-label="Abrir apunte">
+              <ion-icon [icon]="openIcon"></ion-icon>
+            </button>
+          </app-card>
+        }
+      </div>
+    } @else {
+      <app-empty-state title="Tu biblioteca está vacía" description="Compra apuntes para que aparezcan aquí">
+        <span slot="icon">
+          <ion-icon [icon]="bookIcon"></ion-icon>
+        </span>
+        <span slot="action">
+          <app-button (click)="goExplore()">Explorar apuntes</app-button>
+        </span>
+      </app-empty-state>
+    }
+  </div>
+</ion-content>
+
+<app-navbar></app-navbar>

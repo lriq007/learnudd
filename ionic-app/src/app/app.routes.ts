@@ -40,17 +40,33 @@ export const routes: Routes = [
     canActivate: [protectedGuard],
   },
   {
+    // CAP-3: NoteCard (CAP-2) already links here; was falling into the
+    // catch-all below until this spec built the page.
+    path: 'explore/notes/:id',
+    loadComponent: () => import('./note-detail/note-detail.page').then((m) => m.NoteDetailPage),
+    canActivate: [protectedGuard],
+  },
+  {
+    // CAP-3: Header's cart icon (CAP-7/CAP-2) already links here; was
+    // falling into the catch-all below until this spec built the page.
+    path: 'library',
+    loadComponent: () => import('./library/library.page').then((m) => m.LibraryPage),
+    canActivate: [protectedGuard],
+  },
+  {
     path: '',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
     canActivate: [protectedGuard],
     pathMatch: 'full',
   },
   {
-    // Header/Navbar link to domain routes (/messages, /library, /profile,
-    // /publish) that this spec doesn't create yet — catch them here instead
-    // of letting the router throw "cannot match any routes". Kept pointed
-    // at /kit per Code Map ("kit sigue existiendo tal cual") — this spec's
-    // Code Map doesn't ask to retarget the wildcard itself.
+    // Header/Navbar link to domain routes (/messages, /profile, /publish)
+    // that this spec doesn't create yet — catch them here instead of letting
+    // the router throw "cannot match any routes". Kept pointed at /kit per
+    // Code Map ("kit sigue existiendo tal cual") — this spec's Code Map
+    // doesn't ask to retarget the wildcard itself. CAP-3: /library and
+    // /explore/notes/:id are real routes now (registered above), no longer
+    // caught here.
     path: '**',
     redirectTo: 'kit',
   },

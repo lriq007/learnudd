@@ -1,0 +1,160 @@
+<app-header [title]="headerTitle()" [showBack]="true"></app-header>
+
+<ion-content class="note-detail-content">
+  @if (loading()) {
+    <div class="note-detail-page">
+      <app-skeleton height="16rem"></app-skeleton>
+      <app-skeleton height="2rem" width="75%"></app-skeleton>
+      <app-skeleton height="1rem" width="50%"></app-skeleton>
+      <app-skeleton height="8rem"></app-skeleton>
+    </div>
+  } @else if (!note()) {
+    <div class="note-detail-empty">
+      <p>Apunte no encontrado</p>
+    </div>
+  } @else {
+    <div class="note-detail-page">
+      <div class="note-detail-cover">
+        <ion-icon [icon]="documentIcon" class="note-detail-cover__icon"></ion-icon>
+        <div class="note-detail-cover__badges">
+          <app-badge variant="primary" size="sm">{{ materialTypeLabel() }}</app-badge>
+          @if (note()!.pages) {
+            <app-badge variant="default" size="sm">
+              <ion-icon [icon]="documentIcon"></ion-icon>
+              {{ note()!.pages }} págs
+            </app-badge>
+          }
+        </div>
+      </div>
+
+      <div class="note-detail-body">
+        <div class="note-detail-header">
+          <div class="note-detail-header__main">
+            <h1 class="note-detail-title">{{ note()!.title }}</h1>
+            <div class="note-detail-author">
+              <div class="note-detail-author__avatar">
+                <span>{{ authorInitials() }}</span>
+              </div>
+              <div>
+                <p class="note-detail-author__name">
+                  {{ note()!.author?.full_name || 'Autor' }}
+                  <app-verified-badge size="sm"></app-verified-badge>
+                </p>
+                <p class="note-detail-author__major">{{ note()!.author?.major }}</p>
+              </div>
+            </div>
+          </div>
+          @if (note()!.price > 0) {
+            <div class="note-detail-price">
+              <p class="note-detail-price__amount">{{ formatCLP(note()!.price) }}</p>
+              <p class="note-detail-price__currency">CLP</p>
+            </div>
+          } @else {
+            <app-badge variant="success" size="md">Gratis</app-badge>
+          }
+        </div>
+
+        <app-card padding="sm">
+          <div class="note-detail-rating-row">
+            <app-rating-stars
+              [rating]="note()!.average_rating || 0"
+              size="md"
+              [showValue]="true"
+              [showCount]="true"
+              [count]="note()!.ratings_count || 0"
+            ></app-rating-stars>
+            <span class="note-detail-downloads">{{ note()!.downloads }} descargas</span>
+          </div>
+        </app-card>
+
+        @if (note()!.description) {
+          <div>
+            <h3 class="note-detail-section-title">Descripción</h3>
+            <p class="note-detail-description">{{ note()!.description }}</p>
+          </div>
+        }
+
+        <app-ai-declaration-badge [declaration]="note()!.ai_declaration" [details]="note()!.ai_details"></app-ai-declaration-badge>
+
+        <app-card padding="sm">
+          <h3 class="note-detail-section-title">Detalles</h3>
+          <div class="note-detail-details-grid">
+            <div>
+              <p class="note-detail-details-label">Carrera</p>
+              <p class="note-detail-details-value">{{ note()!.major }}</p>
+            </div>
+            <div>
+              <p class="note-detail-details-label">Ramo</p>
+              <p class="note-detail-details-value">{{ note()!.course }}</p>
+            </div>
+            @if (note()!.semester) {
+              <div>
+                <p class="note-detail-details-label">Semestre</p>
+                <p class="note-detail-details-value">{{ note()!.semester }}</p>
+              </div>
+            }
+            <div>
+              <p class="note-detail-details-label">Tipo</p>
+              <p class="note-detail-details-value">{{ materialTypeLabel() }}</p>
+            </div>
+          </div>
+        </app-card>
+
+        <div class="note-detail-reviews">
+          <h3 class="note-detail-section-title note-detail-section-title--icon">
+            <ion-icon [icon]="starIcon" class="note-detail-star-icon"></ion-icon>
+            Opiniones verificadas ({{ ratings().length }})
+          </h3>
+          @if (ratings().length > 0) {
+            <div class="note-detail-reviews-list">
+              @for (rating of visibleRatings(); track rating.id) {
+                <app-card padding="sm">
+                  <div class="note-detail-review">
+                    <div class="note-detail-review__avatar">
+                      <span>{{ getInitials(rating.user?.full_name || 'U') }}</span>
+                    </div>
+                    <div class="note-detail-review__body">
+                      <div class="note-detail-review__header">
+                        <span class="note-detail-review__name">{{ rating.user?.full_name || 'Usuario' }}</span>
+                        @if (rating.verified_purchase) {
+                          <app-badge variant="primary" size="sm">
+                            <ion-icon [icon]="verifiedIcon"></ion-icon>
+                            Compra verificada
+                          </app-badge>
+                        }
+                      </div>
+                      <app-rating-stars [rating]="rating.rating" size="sm" [showValue]="false"></app-rating-stars>
+                      @if (rating.comment) {
+                        <p class="note-detail-review__comment">{{ rating.comment }}</p>
+                      }
+                    </div>
+                  </div>
+                </app-card>
+              }
+            </div>
+          } @else {
+            <p class="note-detail-reviews-empty">Aún no hay opiniones para este apunte</p>
+          }
+        </div>
+      </div>
+
+      <div class="note-detail-actions">
+        <button
+          type="button"
+          class="note-detail-fav"
+          [class.note-detail-fav--active]="isFavorite()"
+          (click)="toggleFavorite()"
+          [attr.aria-label]="favoriteLabel()"
+        >
+          <ion-icon [icon]="isFavorite() ? heartIcon : heartOutlineIcon"></ion-icon>
+        </button>
+        <app-button (click)="handlePurchase()" [loading]="purchasing()" size="lg" class="note-detail-buy">
+          <ion-icon [icon]="cartIcon"></ion-icon>
+          {{ buyLabel() }}
+        </app-button>
+      </div>
+    </div>
+  }
+</ion-content>
+
+<app-toast [(isOpen)]="toastOpen" [message]="toastMessage()" [type]="toastType()"></app-toast>

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import type { Note } from '../models';
+import type { LibraryItem, Note, NoteRating } from '../models';
 
 export interface NotesSearchParams {
   query: string;
@@ -52,5 +52,75 @@ export class NotesService {
 
     const { data } = await query.order('created_at', { ascending: false });
     return (data as Note[] | null) ?? [];
+  }
+
+  // CAP-3: ported from src/app/(protected)/explore/notes/[id]/page.tsx
+  // (fetchNote, líneas 38-46). `.single()` mirrors the MVP: a non-existent
+  // id resolves `data` to null/undefined instead of throwing, same fail-soft
+  // null-client convention as the other reads on this service.
+  async getById(id: string): Promise<Note | null> {
+    const client = this.supabaseService.client;
+    if (!client) return null;
+
+    const { data } = await client.from('notes').select('*, author:profiles(*)').eq('id', id).single();
+    return (data as Note | null) ?? null;
+  }
+
+  // CAP-3: ported from src/app/(protected)/explore/notes/[id]/page.tsx
+  // (fetchNote, líneas 48-54).
+  async getRatings(noteId: string): Promise<NoteRating[]> {
+    const client = this.supabaseService.client;
+    if (!client) return [];
+
+    const { data } = await client
+      .from('note_ratings')
+      .select('*, user:profiles(*)')
+      .eq('note_id', noteId)
+      .order('created_at', { ascending: false });
+
+    return (data as NoteRating[] | null) ?? [];
+  }
+
+  // CAP-3: ported from src/app/(protected)/library/page.tsx (fetchLibrary,
+  // líneas 26-39).
+  async listPurchased(userId: string): Promise<LibraryItem[]> {
+    const client = this.supabaseService.client;
+    if (!client) return [];
+
+    const { data } = await client
+      .from('library')
+      .select('*, note:notes(*, author:profiles(*))')
+      .eq('user_id', userId)
+      .order('purchased_at', { ascending: false });
+
+    return (data as LibraryItem[] | null) ?? [];
+  }
+
+  // CAP-3: ported from src/app/(protected)/explore/notes/[id]/page.tsx
+  // (handlePurchase, líneas 73-100). Per Boundaries: "compra" is a simulated
+  // 1500ms delay + a direct insert into `library` — no real payment gateway,
+  // no `payments` table involved. Per the {error} mutation pattern
+  // (AuthService): a null client fails the same way a configured client
+  // would report a broken request, no separate signal needed by callers.
+  // No try/catch around the Supabase calls themselves — same as the MVP,
+  // which only checks the returned `error` field, never catches a network
+  // rejection (Never: no added network error handling beyond MVP parity).
+  async purchase(userId: string, note: Note): Promise<{ error: string | null }> {
+    const client = this.supabaseService.client;
+    if (!client) return { error: 'Error al procesar el pago' };
+
+    // Simulate payment — no real gateway integration (Never).
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    const { error } = await client.from('library').insert({ user_id: userId, note_id: note.id });
+
+    if (error) return { error: 'Error al procesar el pago' };
+
+    await client
+      .from('notes')
+      .update({ downloads: (note.downloads || 0) + 1 })
+      .eq('id', note.id);
+
+    return { error: null };
   }
 }

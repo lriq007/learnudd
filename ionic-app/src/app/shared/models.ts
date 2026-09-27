@@ -94,6 +94,29 @@ export interface Favorite {
   tutor?: Tutor;
 }
 
+// CAP-3: ported from src/types/index.ts (NoteRating líneas 62-71, LibraryItem
+// líneas 179-187) for the note detail and library pages.
+export interface NoteRating {
+  id: string;
+  user_id: string;
+  note_id: string;
+  rating: number;
+  comment: string | null;
+  verified_purchase: boolean;
+  created_at: string;
+  user?: Profile;
+}
+
+export interface LibraryItem {
+  id: string;
+  user_id: string;
+  note_id: string;
+  purchased_at: string;
+  last_accessed: string | null;
+  progress: number;
+  note?: Note;
+}
+
 export const MAJOR_OPTIONS = [
   'Ingeniería Civil Informática',
   'Ingeniería Comercial',
