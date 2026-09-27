@@ -1,0 +1,15 @@
+.favorites-content {
+  --background: var(--ion-background-color);
+}
+
+.favorites-page {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 16px 16px 96px; // clear the fixed Navbar + safe-bottom
+}
+
+.favorites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}

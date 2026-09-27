@@ -36,5 +36,9 @@ export const guestGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
-  return auth.user() ? router.parseUrl('/kit') : true;
+  // CAP-2: '/' (Home) is now the real post-auth destination, replacing the
+  // CAP-1 temporary redirect to /kit (frozen Intent: "'/' deja de redirigir
+  // a /kit"). /kit stays registered and reachable directly, just no longer
+  // as an auto-redirect target.
+  return auth.user() ? router.parseUrl('/') : true;
 };

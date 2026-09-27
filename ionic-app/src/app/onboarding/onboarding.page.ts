@@ -4,28 +4,16 @@ import { IonContent, IonSelect, IonSelectOption } from '@ionic/angular';
 
 import { ButtonComponent } from '../shared/ui/button/button.component';
 import { AuthService } from '../shared/state/auth.service';
+import { MAJOR_OPTIONS } from '../shared/models';
 
 // Ported from src/app/(protected)/onboarding/page.tsx. Per Code Map:
-// CAMPUS_OPTIONS/MAJOR_OPTIONS/SEMESTER_OPTIONS are ported from
-// src/types/index.ts (líneas 189-222); INTERESTS is ported from the page's
-// own local array. Neither set is shared with any other ionic-app page yet,
-// so both live here (not in shared/models.ts).
+// CAMPUS_OPTIONS/SEMESTER_OPTIONS are ported from src/types/index.ts
+// (líneas 189-222); INTERESTS is ported from the page's own local array.
+// Neither of those 2 sets is shared with any other ionic-app page yet, so
+// both stay here (not in shared/models.ts). MAJOR_OPTIONS moved to
+// shared/models.ts in CAP-2 (Boundaries) now that explore.page.ts is a
+// second consumer — imported from there instead of redeclared locally.
 const CAMPUS_OPTIONS = ['Santiago', 'Vitacura', 'Concepción', 'Valparaíso'] as const;
-
-const MAJOR_OPTIONS = [
-  'Ingeniería Civil Informática',
-  'Ingeniería Comercial',
-  'Derecho',
-  'Medicina',
-  'Psicología',
-  'Arquitectura',
-  'Enfermería',
-  'Ingeniería Civil',
-  'Ingeniería Ambiental',
-  'Periodismo',
-  'Design',
-  'Odontología',
-] as const;
 
 const SEMESTER_OPTIONS = [
   '1° Semestre',
@@ -154,6 +142,7 @@ export class OnboardingPage {
     }
 
     this.loading.set(false);
-    await this.router.navigateByUrl('/kit');
+    // CAP-2: '/' (Home) replaces /kit as the real post-onboarding destination.
+    await this.router.navigateByUrl('/');
   }
 }

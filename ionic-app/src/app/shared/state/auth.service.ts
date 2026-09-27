@@ -1,6 +1,6 @@
-import { Injectable, signal } from '@angular/core';
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import { environment } from '../../../environments/environment';
+import { Injectable, inject, signal } from '@angular/core';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseService } from './supabase.service';
 import type { Profile } from '../models';
 
 // Ported from src/stores/authStore.ts (Zustand) to an injectable signal-based
@@ -18,16 +18,19 @@ import type { Profile } from '../models';
 // synchronously); fetchUser()/signOut() treat a missing client the same as
 // "no active session" instead of throwing, which is also the honest
 // behavior when Supabase isn't wired up (or is misconfigured) at all.
+//
+// CAP-2: the client construction itself moved to SupabaseService (Boundaries
+// — a 2nd domain, notes/tutors/favorites, now needs it too, so it can no
+// longer live only inside this service). This class keeps the exact same
+// private `supabase` accessor name/shape and every public signature —
+// "sin cambiar ninguna de sus firmas ni su comportamiento observable".
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly supabase: SupabaseClient | null = (() => {
-    if (!environment.supabaseUrl || !environment.supabaseAnonKey) return null;
-    try {
-      return createClient(environment.supabaseUrl, environment.supabaseAnonKey);
-    } catch {
-      return null;
-    }
-  })();
+  private readonly supabaseService = inject(SupabaseService);
+
+  private get supabase(): SupabaseClient | null {
+    return this.supabaseService.client;
+  }
 
   private readonly _user = signal<Profile | null>(null);
   private readonly _loading = signal(true);

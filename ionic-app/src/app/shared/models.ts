@@ -19,6 +19,106 @@ export interface Profile {
 
 export type AIDeclaration = 'none' | 'assisted' | 'generated';
 
+// CAP-2: ported from src/types/index.ts (MaterialType líneas 17-24, Note
+// líneas 29-52, Tutor+TutorCourse líneas 73-95, Favorite líneas 167-177,
+// MAJOR_OPTIONS líneas 196-209, MATERIAL_TYPE_LABELS líneas 224-232). Only
+// the fields Home/Explore/Favorites actually read are kept — same pruning
+// approach CAP-7 already used for Profile/CartItem above. `status`/
+// `ai_declaration` stay inline unions/the existing AIDeclaration type rather
+// than adding NoteStatus (not in this spec's Code Map list of new exports).
+export type MaterialType =
+  | 'resumen'
+  | 'guia_ejercicios'
+  | 'formulario'
+  | 'mapa_conceptual'
+  | 'apuntes_clase'
+  | 'preparacion_certamen'
+  | 'pauta_autorizada';
+
+export interface Note {
+  id: string;
+  author_id: string;
+  title: string;
+  description: string | null;
+  major: string;
+  course: string;
+  semester: string | null;
+  material_type: MaterialType;
+  price: number;
+  currency: string;
+  pages: number | null;
+  file_url: string | null;
+  cover_url: string | null;
+  ai_declaration: AIDeclaration;
+  ai_details: string | null;
+  status: 'draft' | 'review' | 'active' | 'paused' | 'rejected';
+  downloads: number;
+  created_at: string;
+  updated_at: string;
+  author?: Profile;
+  average_rating?: number;
+  ratings_count?: number;
+}
+
+export interface TutorCourse {
+  id: string;
+  tutor_id: string;
+  course_name: string;
+  major: string;
+}
+
+export interface Tutor {
+  id: string;
+  user_id: string;
+  bio: string | null;
+  experience: string | null;
+  hourly_price: number;
+  campus: string;
+  modalities: string[];
+  verified: boolean;
+  total_classes: number;
+  created_at: string;
+  user?: Profile;
+  courses?: TutorCourse[];
+  average_rating?: number;
+  ratings_count?: number;
+}
+
+export interface Favorite {
+  id: string;
+  user_id: string;
+  note_id: string | null;
+  tutor_id: string | null;
+  created_at: string;
+  note?: Note;
+  tutor?: Tutor;
+}
+
+export const MAJOR_OPTIONS = [
+  'Ingeniería Civil Informática',
+  'Ingeniería Comercial',
+  'Derecho',
+  'Medicina',
+  'Psicología',
+  'Arquitectura',
+  'Enfermería',
+  'Ingeniería Civil',
+  'Ingeniería Ambiental',
+  'Periodismo',
+  'Design',
+  'Odontología',
+] as const;
+
+export const MATERIAL_TYPE_LABELS: Record<MaterialType, string> = {
+  resumen: 'Resumen',
+  guia_ejercicios: 'Guía de Ejercicios',
+  formulario: 'Formulario',
+  mapa_conceptual: 'Mapa Conceptual',
+  apuntes_clase: 'Apuntes de Clase',
+  preparacion_certamen: 'Preparación de Certamen',
+  pauta_autorizada: 'Pauta Autorizada',
+};
+
 export interface CartItem {
   id: string;
   type: 'note' | 'booking';

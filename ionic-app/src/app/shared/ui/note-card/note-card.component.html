@@ -1,0 +1,53 @@
+@if (variant() === 'compact') {
+  <a [routerLink]="['/explore/notes', note().id]" class="note-card note-card--compact">
+    <app-card class="note-card__card note-card__card--compact" padding="sm">
+      <div class="note-card__thumb note-card__thumb--compact">
+        <ion-icon [icon]="bookIcon"></ion-icon>
+      </div>
+      <h3 class="note-card__title note-card__title--compact">{{ note().title }}</h3>
+      <p class="note-card__meta">{{ note().course }}</p>
+      @if (showRating()) {
+        <app-rating-stars [rating]="note().average_rating || 0" size="sm" [showValue]="true"></app-rating-stars>
+      }
+    </app-card>
+  </a>
+} @else {
+  <a [routerLink]="['/explore/notes', note().id]" class="note-card note-card--list">
+    <app-card class="note-card__card">
+      <div class="note-card__row">
+        <div class="note-card__thumb">
+          <ion-icon [icon]="bookIcon"></ion-icon>
+        </div>
+        <div class="note-card__body">
+          <div class="note-card__title-row">
+            <h3 class="note-card__title">{{ note().title }}</h3>
+            @if (isFree()) {
+              <app-badge variant="success" size="sm">Gratis</app-badge>
+            }
+          </div>
+          <p class="note-card__meta">{{ note().course }} · {{ authorName() }}</p>
+          @if (showMaterialBadge()) {
+            <div class="note-card__badges">
+              <app-badge variant="primary" size="sm">{{ materialTypeLabel() }}</app-badge>
+            </div>
+          }
+          <div class="note-card__footer">
+            @if (showRating()) {
+              <app-rating-stars
+                [rating]="note().average_rating || 0"
+                size="sm"
+                [showCount]="true"
+                [count]="note().ratings_count || 0"
+              ></app-rating-stars>
+            } @else {
+              <span></span>
+            }
+            @if (note().price > 0) {
+              <span class="note-card__price">{{ formatCLP(note().price) }}</span>
+            }
+          </div>
+        </div>
+      </div>
+    </app-card>
+  </a>
+}

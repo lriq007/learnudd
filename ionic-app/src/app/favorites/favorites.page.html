@@ -1,0 +1,31 @@
+<app-header title="Favoritos"></app-header>
+
+<ion-content class="favorites-content">
+  <div class="favorites-page">
+    @if (loading()) {
+      <div class="favorites-list">
+        @for (i of skeletonRows; track i) {
+          <app-skeleton height="6rem"></app-skeleton>
+        }
+      </div>
+    } @else if (favorites().length > 0) {
+      <div class="favorites-list">
+        @for (fav of favorites(); track fav.id) {
+          @if (fav.note) {
+            <app-note-card [note]="fav.note" [showRating]="false"></app-note-card>
+          } @else if (fav.tutor) {
+            <app-tutor-card [tutor]="fav.tutor" [subtitle]="tutorSubtitle(fav)" [showRating]="false"></app-tutor-card>
+          }
+        }
+      </div>
+    } @else {
+      <app-empty-state title="No tienes favoritos" description="Guarda apuntes y tutores que te interesen">
+        <span slot="action">
+          <app-button (click)="goExplore()">Explorar</app-button>
+        </span>
+      </app-empty-state>
+    }
+  </div>
+</ion-content>
+
+<app-navbar></app-navbar>

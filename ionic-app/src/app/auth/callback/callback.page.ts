@@ -48,6 +48,7 @@ export class CallbackPage implements OnInit {
       return;
     }
 
-    await this.router.navigateByUrl('/kit');
+    // CAP-2: '/' (Home) replaces /kit as the real post-callback destination.
+    await this.router.navigateByUrl('/');
   }
 }

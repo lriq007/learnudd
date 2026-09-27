@@ -90,9 +90,10 @@ export class LoginPage {
       // protectedGuard reads auth.user() — without this, a successful
       // password login would navigate to a guarded route while the local
       // signal is still null, and bounce straight back to /login.
+      // CAP-2: '/' (Home) replaces /kit as the real post-login destination.
       await this.auth.fetchUser();
       this.loading.set(false);
-      await this.router.navigateByUrl('/kit');
+      await this.router.navigateByUrl('/');
       return;
     }
 

@@ -61,12 +61,12 @@ describe('auth.guard', () => {
   });
 
   describe('guestGuard', () => {
-    it('con user(): redirige a /kit', () => {
+    it('con user(): redirige a / (Home, CAP-2 reemplaza /kit)', () => {
       const { router } = setup({ id: 'u1', onboarding_completed: true });
 
       const result = TestBed.runInInjectionContext(() => guestGuard(routeWithPath('login'), state));
 
-      expect(result).toEqual(router.parseUrl('/kit'));
+      expect(result).toEqual(router.parseUrl('/'));
     });
 
     it('sin user(): no redirige', () => {

@@ -54,7 +54,7 @@ describe('LoginPage', () => {
     expect(component.error()).toBe('Correo o contraseña incorrectos');
   });
 
-  it('password correcto: refresca la sesión (fetchUser) antes de navegar a /kit', async () => {
+  it('password correcto: refresca la sesión (fetchUser) antes de navegar a / (Home, CAP-2 reemplaza /kit)', async () => {
     const { component, authServiceStub } = setup();
     component.email.set('martina@udd.cl');
     component.password.set('test123456');
@@ -62,7 +62,7 @@ describe('LoginPage', () => {
     await component.submit();
 
     // Bug guard: sin este fetchUser(), protectedGuard vería auth.user() en
-    // null al evaluar /kit y rebotaría de vuelta a /login.
+    // null al evaluar / y rebotaría de vuelta a /login.
     expect(authServiceStub['fetchUser']).toHaveBeenCalled();
     expect(component.error()).toBe('');
   });

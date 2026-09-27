@@ -1,0 +1,37 @@
+<a [routerLink]="['/explore/tutors', tutor().id]" class="tutor-card">
+  <app-card class="tutor-card__card">
+    <div class="tutor-card__row">
+      <div class="tutor-card__avatar">
+        <span>{{ initials() }}</span>
+      </div>
+      <div class="tutor-card__body">
+        <div class="tutor-card__name-row">
+          <h3 class="tutor-card__name">{{ displayName() }}</h3>
+          @if (tutor().verified && showRating()) {
+            <app-verified-badge size="sm"></app-verified-badge>
+          }
+        </div>
+        <p class="tutor-card__subtitle">{{ subtitle() }}</p>
+
+        @if (showModalities()) {
+          <div class="tutor-card__modalities">
+            <app-badge variant="primary" size="sm">{{ tutor().modalities.join(' · ') }}</app-badge>
+            <span class="tutor-card__classes">{{ tutor().total_classes }} clases</span>
+          </div>
+        }
+
+        @if (showRating()) {
+          <div class="tutor-card__footer">
+            <app-rating-stars
+              [rating]="tutor().average_rating || 0"
+              size="sm"
+              [showCount]="true"
+              [count]="tutor().ratings_count || 0"
+            ></app-rating-stars>
+            <span class="tutor-card__price">{{ formatCLP(tutor().hourly_price) }}/h</span>
+          </div>
+        }
+      </div>
+    </div>
+  </app-card>
+</a>

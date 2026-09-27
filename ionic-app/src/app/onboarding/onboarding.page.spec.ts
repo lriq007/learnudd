@@ -62,7 +62,7 @@ describe('OnboardingPage', () => {
     expect(component.step()).toBe(2);
   });
 
-  it('paso 3 con éxito: updateProfile() incluye onboarding_completed:true y navega a /kit', async () => {
+  it('paso 3 con éxito: updateProfile() incluye onboarding_completed:true y navega a / (Home, CAP-2 reemplaza /kit)', async () => {
     const { component, authServiceStub, navigateSpy } = setup();
 
     completeSteps1And2(component);
@@ -75,7 +75,7 @@ describe('OnboardingPage', () => {
     expect(authServiceStub['updateProfile']).toHaveBeenCalledWith(
       expect.objectContaining({ onboarding_completed: true, interests: ['Cálculo II'] }),
     );
-    expect(navigateSpy).toHaveBeenCalledWith('/kit');
+    expect(navigateSpy).toHaveBeenCalledWith('/');
   });
 
   it('paso 3 con updateProfile() fallando: setea error() y no navega', async () => {

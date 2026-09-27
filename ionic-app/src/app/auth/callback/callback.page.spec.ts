@@ -64,13 +64,13 @@ describe('CallbackPage', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/onboarding');
   });
 
-  it('con usuario y onboarding_completed=true: redirige a /kit', async () => {
+  it('con usuario y onboarding_completed=true: redirige a / (Home, CAP-2 reemplaza /kit)', async () => {
     const { component, navigateSpy } = setup({
       user: vi.fn().mockReturnValue({ id: 'u1', onboarding_completed: true }),
     });
 
     await component.ngOnInit();
 
-    expect(navigateSpy).toHaveBeenCalledWith('/kit');
+    expect(navigateSpy).toHaveBeenCalledWith('/');
   });
 });

@@ -1,0 +1,77 @@
+.tutor-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 12px;
+}
+
+.tutor-card__row {
+  display: flex;
+  gap: 12px;
+}
+
+.tutor-card__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--udd-radius-full);
+  background: rgba(var(--ion-color-secondary-rgb), 0.1); // udd-deep/10 (--ion-color-secondary-rgb === --udd-deep)
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  span {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--udd-deep);
+  }
+}
+
+.tutor-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.tutor-card__name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tutor-card__name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--udd-graphite);
+  margin: 0;
+}
+
+.tutor-card__subtitle {
+  font-size: 0.75rem;
+  color: var(--udd-gray);
+  margin: 2px 0 0;
+}
+
+.tutor-card__modalities {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.tutor-card__classes {
+  font-size: 0.75rem;
+  color: var(--udd-gray);
+}
+
+.tutor-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.tutor-card__price {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--udd-blue);
+}
