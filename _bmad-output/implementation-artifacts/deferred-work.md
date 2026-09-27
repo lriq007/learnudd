@@ -133,3 +133,35 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-tutor-bookings.md`
   summary: `ionic-app/angular.json` sigue teniendo la clave `"cli.analytics"` con un UUID sin relación a ninguna feature.
   evidence: Hallazgo de review (blind-hunter) sobre este spec. Confirmado que esta modificación ya estaba presente en el working tree antes de que este spec empezara — mismo ruido de tooling local ya documentado en el ítem de `spec-cap-3-publish-note.md` más arriba, todavía sin resolver.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-publish-tutor.md`
+  summary: `PublishTutorPage.setHourlyPrice()` no tiene piso en 0 (permite precio negativo) y el `ion-input` no tiene `min`; un valor negativo pasaría el `canSubmit()` y solo fallaría en el `CHECK (hourly_price >= 0)` de la tabla `tutors`, mostrando el toast genérico sin indicar la causa real.
+  evidence: Hallazgo de review (blind-hunter + edge-case-hunter). Verificado que el MVP (`publish/tutor/page.tsx` línea 168) tiene exactamente el mismo `parseInt(e.target.value) || 0` sin `Math.max` ni `min`. Paridad fiel, mismo patrón ya diferido para `price`/`pages` en `spec-cap-3-publish-note.md`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-publish-tutor.md`
+  summary: Filas de curso incompletas (`course_name` sin `major` o viceversa) se descartan en silencio al hacer submit, sin avisar al usuario que ese curso no se guardó.
+  evidence: Hallazgo de review (blind-hunter). Verificado que `handleSubmit` del MVP (líneas 87-93) hace el mismo `.filter(c => c.course_name && c.major)` sin ningún aviso. Paridad fiel.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-publish-tutor.md`
+  summary: Los botones toggle de modalidad (`presencial`/`online`) no tienen `aria-pressed`, y los `<label>` de Bio/Modalidades/Ramos que enseñas en `publish-tutor.page.html` no están asociados a sus controles vía `for`/`id`.
+  evidence: Hallazgo de review (blind-hunter). Real, pero misma clase de gap de accesibilidad ya aceptada y diferida repetidamente en CAP-2/CAP-3 (controles sin `aria-label`/`aria-pressed`/`aria-valuenow`) — ninguna página de este repo lo tiene todavía.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-publish-tutor.md`
+  summary: `canSubmit()` y el filtro de cursos completos no hacen `.trim()` — aceptan `bio`, `course_name` o `major` de solo espacios como válidos.
+  evidence: Hallazgo de review (edge-case-hunter). Verificado que `canSubmit` del MVP (líneas 104-107) tampoco hace trim. Paridad fiel, mismo patrón ya diferido para `title`/`course` en `spec-cap-3-publish-note.md`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-publish-tutor.md`
+  summary: `PublishTutorPage.submit()` no vuelve a evaluar `canSubmit()` antes de llamar a `tutorsService.create()` — depende solo de que el botón esté deshabilitado.
+  evidence: Hallazgo de review (edge-case-hunter). Verificado que `handleSubmit` del MVP tampoco re-chequea `canSubmit`, solo el guard `if (!user) return`. Paridad fiel.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-publish-tutor.md`
+  summary: `PublishTutorPage.submit()` no tiene try/catch — si `tutorsService.create()` rechaza (falla de red real) en vez de resolver `{error}`, `loading()` queda en `true` para siempre sin ningún toast.
+  evidence: Hallazgo de review (edge-case-hunter). Verificado que el MVP tampoco tiene try/catch en `handleSubmit`. El Never de este spec excluye explícitamente agregar manejo de errores de red más allá del MVP.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-publish-tutor.md`
+  summary: `PublishTutorPage.submit()` no tiene guarda anti doble-tap — nada impide dos llamadas a `create()` si el usuario hace click dos veces muy rápido.
+  evidence: Hallazgo de review (edge-case-hunter). Verificado que el MVP tampoco la tiene, y el mismo gap ya fue diferido para `BookingsPage.handleBooking()` en `spec-cap-4-tutor-bookings.md`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-publish-tutor.md`
+  summary: `addCourse()` no tiene tope ni chequeo de filas duplicadas, y `removeCourse()` no tiene guarda interna contra vaciar la lista — depende solo de que el template oculte el botón de quitar cuando `length <= 1`.
+  evidence: Hallazgo de review (blind-hunter + edge-case-hunter). Verificado que el MVP tiene exactamente la misma lógica (`courses: [...formData.courses, {...}]` sin tope, `formData.courses.length > 1` solo en el JSX). Paridad fiel.

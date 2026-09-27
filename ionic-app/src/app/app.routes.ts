@@ -67,6 +67,14 @@ export const routes: Routes = [
     canActivate: [protectedGuard],
   },
   {
+    // CAP-4 (resto, spec-cap-4-publish-tutor): the chooser's "Ofrecer clases"
+    // card (CAP-3 resto) already links here; was falling into the catch-all
+    // below until this spec built the form page.
+    path: 'publish/tutor',
+    loadComponent: () => import('./publish-tutor/publish-tutor.page').then((m) => m.PublishTutorPage),
+    canActivate: [protectedGuard],
+  },
+  {
     // CAP-4: TutorCard (CAP-2) already links here; was falling into the
     // catch-all below until this spec built the page.
     path: 'explore/tutors/:id',
@@ -89,18 +97,18 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    // Header/Navbar link to domain routes (/messages, /profile, /publish/tutor)
-    // that this spec doesn't create yet — catch them here instead of letting
-    // the router throw "cannot match any routes". Kept pointed at /kit per
-    // Code Map ("kit sigue existiendo tal cual") — this spec's Code Map
-    // doesn't ask to retarget the wildcard itself. CAP-3: /library and
+    // Header/Navbar link to domain routes (/messages, /profile) that this
+    // spec doesn't create yet — catch them here instead of letting the
+    // router throw "cannot match any routes". Kept pointed at /kit per Code
+    // Map ("kit sigue existiendo tal cual") — this spec's Code Map doesn't
+    // ask to retarget the wildcard itself. CAP-3: /library and
     // /explore/notes/:id are real routes now (registered above), no longer
     // caught here. CAP-3 (resto, spec-cap-3-publish-note): /publish and
     // /publish/note are real routes too now. CAP-4: /explore/tutors/:id and
     // /bookings are real routes too now (registered above), no longer
-    // caught here; /publish/tutor (CAP-4, "Ofrecer clases") still falls
-    // here, per Boundaries — a deliberate, already accepted pattern, not a
-    // gap this spec introduces.
+    // caught here. CAP-4 (resto, spec-cap-4-publish-tutor): /publish/tutor
+    // ("Ofrecer clases") is a real route too now (registered above), no
+    // longer caught here.
     path: '**',
     redirectTo: 'kit',
   },

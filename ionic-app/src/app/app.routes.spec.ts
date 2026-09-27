@@ -13,6 +13,7 @@ import { NoteDetailPage } from './note-detail/note-detail.page';
 import { LibraryPage } from './library/library.page';
 import { PublishPage } from './publish/publish.page';
 import { PublishNotePage } from './publish-note/publish-note.page';
+import { PublishTutorPage } from './publish-tutor/publish-tutor.page';
 import { TutorDetailPage } from './tutor-detail/tutor-detail.page';
 import { BookingsPage } from './bookings/bookings.page';
 
@@ -119,6 +120,24 @@ describe('app.routes', () => {
     const harness = await RouterTestingHarness.create();
 
     await harness.navigateByUrl('/publish/note');
+
+    expect(router.url).toBe('/login');
+  });
+
+  it('usuario autenticado: /publish/tutor activa PublishTutorPage', async () => {
+    setup({ id: 'u1', onboarding_completed: true });
+    const harness = await RouterTestingHarness.create();
+
+    const component = await harness.navigateByUrl('/publish/tutor');
+
+    expect(component).toBeInstanceOf(PublishTutorPage);
+  });
+
+  it('sin sesión: /publish/tutor redirige a /login (protectedGuard)', async () => {
+    const { router } = setup(null);
+    const harness = await RouterTestingHarness.create();
+
+    await harness.navigateByUrl('/publish/tutor');
 
     expect(router.url).toBe('/login');
   });

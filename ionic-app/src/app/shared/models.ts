@@ -84,6 +84,19 @@ export interface Tutor {
   ratings_count?: number;
 }
 
+// CAP-4 (resto, spec-cap-4-publish-tutor): ported from
+// src/app/(protected)/publish/tutor/page.tsx's formData shape (líneas
+// 22-29), minus user_id (passed as create()'s own arg, same split
+// CreateNoteInput/NotesService.create() already use).
+export interface CreateTutorInput {
+  bio: string;
+  experience: string;
+  hourly_price: number;
+  campus: string;
+  modalities: string[];
+  courses: Array<{ course_name: string; major: string }>;
+}
+
 // CAP-4: ported from src/types/index.ts (TutorSchedule líneas 97-106,
 // TutorRating líneas 108-117, BookingStatus/PaymentStatus líneas 119-120,
 // Booking líneas 123-140) for the tutor detail and bookings pages.
@@ -165,6 +178,15 @@ export interface LibraryItem {
   progress: number;
   note?: Note;
 }
+
+// CAP-4 (resto, spec-cap-4-publish-tutor): ported from src/types/index.ts
+// (líneas 189-194), same criterion as MAJOR_OPTIONS below.
+export const CAMPUS_OPTIONS = [
+  'Santiago',
+  'Vitacura',
+  'Concepción',
+  'Valparaíso',
+] as const;
 
 export const MAJOR_OPTIONS = [
   'Ingeniería Civil Informática',
