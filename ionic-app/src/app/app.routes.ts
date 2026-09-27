@@ -115,10 +115,17 @@ export const routes: Routes = [
   },
   {
     // CAP-6: Navbar's "Perfil" tab (CAP-7) already links here; was falling
-    // into the catch-all below until this spec built the page. Only
-    // /profile/creator (out of scope, deferred-work.md) stays uncaught.
+    // into the catch-all below until this spec built the page.
     path: 'profile',
     loadComponent: () => import('./profile/profile.page').then((m) => m.ProfilePage),
+    canActivate: [protectedGuard],
+  },
+  {
+    // CAP-6 (resto, spec-cap-6-creator-dashboard): profile.page's "Modo
+    // creador" card (restored by this spec) already links here; was falling
+    // into the catch-all below until this spec built the page.
+    path: 'profile/creator',
+    loadComponent: () => import('./profile-creator/profile-creator.page').then((m) => m.ProfileCreatorPage),
     canActivate: [protectedGuard],
   },
   {
@@ -135,8 +142,10 @@ export const routes: Routes = [
     // route too now (registered above), no longer caught here. CAP-5:
     // /messages and /messages/:userId are real routes too now (registered
     // above), no longer caught here. CAP-6: /profile is a real route too now
-    // (registered above), no longer caught here — only /profile/creator
-    // (out of scope) still falls through to this catch-all.
+    // (registered above), no longer caught here. CAP-6 (resto,
+    // spec-cap-6-creator-dashboard): /profile/creator is a real route too
+    // now (registered above) — nothing pending from CAP-6 falls through to
+    // this catch-all anymore.
     path: '**',
     redirectTo: 'kit',
   },

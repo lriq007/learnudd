@@ -93,6 +93,19 @@ describe('ProfilePage', () => {
     });
   });
 
+  // Acceptance Criteria (spec-cap-6-creator-dashboard): "un card 'Modo
+  // creador' enlaza a /profile/creator".
+  it('muestra el card "Modo creador" enlazando a /profile/creator', async () => {
+    const { fixture, component } = setup();
+
+    await component.ngOnInit();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Modo creador');
+    const link = fixture.nativeElement.querySelector('.profile-creator-link');
+    expect(link?.getAttribute('href')).toBe('/profile/creator');
+  });
+
   it('perfil sin verificar: no muestra app-verified-badge', async () => {
     const { fixture, component } = setup({ verified: false });
 

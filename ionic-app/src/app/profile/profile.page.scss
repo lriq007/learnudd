@@ -106,6 +106,53 @@
   color: var(--udd-gray);
 }
 
+// Ported from profile/page.tsx's "Modo creador" card (líneas 132-144):
+// `bg-gradient-to-r from-udd-deep to-udd-blue text-white`. Same ::ng-deep
+// technique as .profile-logout below (and login.page.scss) to reach into
+// CardComponent's inner ion-card, since a `class` attribute on <app-card>
+// lands on its host element, not on the ion-card its own template renders.
+.profile-creator-link {
+  display: block;
+  text-decoration: none;
+}
+
+.profile-creator-card {
+  ::ng-deep .app-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(to right, var(--udd-deep), var(--udd-blue));
+    color: #ffffff;
+  }
+}
+
+.profile-creator-card__icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.profile-creator-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-creator-card__title {
+  margin: 0;
+  font-size: 0.875rem; // text-sm
+  font-weight: 600;
+}
+
+.profile-creator-card__subtitle {
+  margin: 2px 0 0;
+  font-size: 0.75rem; // text-xs
+  color: rgba(255, 255, 255, 0.7); // text-white/70
+}
+
+.profile-creator-card__chevron {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
 .profile-menu__item {
   display: flex;
   align-items: center;

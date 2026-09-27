@@ -20,6 +20,7 @@ import { MessagesPage } from './messages/messages.page';
 import { ChatPage } from './chat/chat.page';
 import { MessagesService } from './shared/state/messages.service';
 import { ProfilePage } from './profile/profile.page';
+import { ProfileCreatorPage } from './profile-creator/profile-creator.page';
 
 // Review fix: every other spec provides `provideRouter([])` (an empty route
 // table) or stubs `ActivatedRoute` directly, so nothing previously resolved
@@ -240,6 +241,27 @@ describe('app.routes', () => {
     const harness = await RouterTestingHarness.create();
 
     await harness.navigateByUrl('/profile');
+
+    expect(router.url).toBe('/login');
+  });
+
+  // spec-cap-6-creator-dashboard: was falling into the `**` catch-all
+  // (redirectTo 'kit') before this spec registered the route — this guards
+  // against that regressing silently.
+  it('usuario autenticado: /profile/creator activa ProfileCreatorPage', async () => {
+    setup({ id: 'u1', onboarding_completed: true });
+    const harness = await RouterTestingHarness.create();
+
+    const component = await harness.navigateByUrl('/profile/creator');
+
+    expect(component).toBeInstanceOf(ProfileCreatorPage);
+  });
+
+  it('sin sesión: /profile/creator redirige a /login (protectedGuard)', async () => {
+    const { router } = setup(null);
+    const harness = await RouterTestingHarness.create();
+
+    await harness.navigateByUrl('/profile/creator');
 
     expect(router.url).toBe('/login');
   });

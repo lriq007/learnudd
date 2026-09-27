@@ -1,0 +1,200 @@
+.creator-content {
+  --background: var(--ion-background-color);
+}
+
+.creator-page {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// Stats grid — ported from page.tsx's `grid grid-cols-2 gap-3` (línea 142).
+.creator-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.creator-stats__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.creator-stats__icon {
+  font-size: 16px;
+}
+
+.creator-stats__icon--blue {
+  color: var(--udd-blue);
+}
+
+.creator-stats__icon--sky {
+  color: var(--udd-sky);
+}
+
+.creator-stats__icon--gold {
+  color: var(--udd-gold);
+}
+
+.creator-stats__label {
+  font-size: 0.75rem; // text-xs
+  color: var(--udd-gray);
+}
+
+.creator-stats__value {
+  margin: 0;
+  font-size: 1.25rem; // text-xl
+  font-weight: 700;
+  color: var(--udd-graphite);
+}
+
+// Notes list.
+.creator-notes__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.creator-notes__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1rem; // text-base
+  font-weight: 600;
+  color: var(--udd-graphite);
+
+  ion-icon {
+    font-size: 16px;
+    color: var(--udd-blue);
+  }
+}
+
+.creator-notes__add {
+  font-size: 0.875rem; // text-sm
+  font-weight: 500;
+  color: var(--udd-blue);
+  text-decoration: none;
+}
+
+.creator-notes__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.creator-notes__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.creator-notes__item-icon {
+  width: 40px;
+  height: 48px;
+  border-radius: var(--udd-radius-lg);
+  background: rgba(var(--ion-color-primary-rgb), 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  ion-icon {
+    font-size: 16px;
+    color: rgba(var(--ion-color-primary-rgb), 0.4);
+  }
+}
+
+.creator-notes__item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.creator-notes__item-title {
+  margin: 0;
+  font-size: 0.875rem; // text-sm
+  font-weight: 600;
+  color: var(--udd-graphite);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.creator-notes__item-course {
+  margin: 2px 0 0;
+  font-size: 0.75rem; // text-xs
+  color: var(--udd-gray);
+}
+
+.creator-notes__item-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.creator-notes__item-sales {
+  margin: 4px 0 0;
+  font-size: 0.75rem; // text-xs
+  color: var(--udd-gray);
+}
+
+// Tutor profile section.
+.creator-tutor__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 1rem; // text-base
+  font-weight: 600;
+  color: var(--udd-graphite);
+
+  ion-icon {
+    font-size: 16px;
+    color: var(--udd-sky);
+  }
+}
+
+.creator-tutor__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.creator-tutor__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--udd-radius-full);
+  background: rgba(var(--ion-color-tertiary-rgb), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  ion-icon {
+    font-size: 16px;
+    color: var(--udd-sky);
+  }
+}
+
+.creator-tutor__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.creator-tutor__courses {
+  margin: 0;
+  font-size: 0.875rem; // text-sm
+  font-weight: 600;
+  color: var(--udd-graphite);
+}
+
+.creator-tutor__price {
+  margin: 2px 0 0;
+  font-size: 0.75rem; // text-xs
+  color: var(--udd-gray);
+}

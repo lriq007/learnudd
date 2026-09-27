@@ -55,6 +55,17 @@
       </div>
     </app-card>
 
+    <a routerLink="/profile/creator" class="profile-creator-link">
+      <app-card class="profile-creator-card">
+        <ion-icon [icon]="trendingUpIcon" class="profile-creator-card__icon"></ion-icon>
+        <div class="profile-creator-card__info">
+          <p class="profile-creator-card__title">Modo creador</p>
+          <p class="profile-creator-card__subtitle">Gestiona tus publicaciones y clases</p>
+        </div>
+        <ion-icon [icon]="chevronIcon" class="profile-creator-card__chevron"></ion-icon>
+      </app-card>
+    </a>
+
     <app-card padding="none" class="profile-menu">
       @for (item of menuItems; track item.label; let last = $last) {
         @if (item.href === '#') {

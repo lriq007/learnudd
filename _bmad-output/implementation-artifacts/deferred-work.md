@@ -177,3 +177,19 @@
 - source_spec: none
   summary: CAP-6 (resto) — Dashboard de creador (`/profile/creator`) en Ionic+Angular: ventas/ingresos del creador, análogo al perfil de usuario de CAP-6 pero como deliverable independiente.
   evidence: Split de CAP-6 (perfil + dashboard de creador) en el arranque del build de CAP-6 — mismo patrón que CAP-3 (detalle+biblioteca vs publicar) y CAP-4 (perfil de tutor+reservas vs publicar tutor); dashboard de creador tiene datos y UI propios, no depende de la edición de perfil, y el bug de ingresos en 0 (`known-issues.md`) no se corrige, solo se replica.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-6-creator-dashboard.md`
+  summary: `ProfileCreatorPage.ngOnInit()` no tiene `try/catch/finally` — si cualquiera de las 3 queries paralelizadas (`tutors`/`notes`/`library`) rechaza por una falla de red real, `loading()` queda en `true` para siempre (skeleton infinito) sin ningún toast ni fallback.
+  evidence: Hallazgo de review (blind-hunter + edge-case-hunter). Verificado que el MVP (`profile/creator/page.tsx` líneas 40-92) tiene exactamente el mismo hueco — `setLoading(false)` solo al final de `fetchData()`, sin `try/catch`. Paridad fiel, mismo patrón ya diferido para `PublishTutorPage.submit()` en `spec-cap-4-publish-tutor.md`. El Never de este spec excluye explícitamente agregar manejo de errores más allá del MVP.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-6-creator-dashboard.md`
+  summary: `ProfileCreatorPage.ngOnInit()` nunca revisa `tutorResult.error`/`notesResult.error` — una falla real de Supabase (RLS, esquema) que resuelve con `{data: null, error: {...}}` se renderiza idéntica a "sin perfil de tutor"/"sin apuntes publicados", ocultándole al usuario que hubo un error real de backend.
+  evidence: Hallazgo de review (edge-case-hunter). Verificado que el MVP destructura solo `data` de cada query (`const { data: tutorData } = await supabase...`), ignorando `error` exactamente igual. Paridad fiel, mismo patrón ya presente en `NotesService`/`TutorsService`/`ProfilePage.ngOnInit` de specs anteriores.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-6-creator-dashboard.md`
+  summary: `note.status` fuera de los 5 valores mapeados en `ProfileCreatorPage.statusLabels` (drift de esquema/dato real inesperado) renderiza el badge de estado con texto vacío/`undefined`, sin fallback.
+  evidence: Hallazgo de review (edge-case-hunter). Verificado que el MVP tiene el mismo `statusLabels[note.status]` sin fallback (página.tsx línea 213) — el tipo TS de `Note['status']` no protege contra datos reales fuera de esas 5 opciones en runtime. Paridad fiel, no introducido por este diff.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-6-creator-dashboard.md`
+  summary: Ningún test de `profile-creator.page.spec.ts` renderiza el estado `loading()=true` (los 2 `app-skeleton` de la lista de apuntes, ninguno en el stats grid) — todos los tests esperan a que `ngOnInit()` resuelva antes de `detectChanges()`.
+  evidence: Hallazgo de review (verification-gap + blind-hunter, mismo hallazgo). Es el mismo patrón que el resto del suite ya usa en cada página con `loading`/`ngOnInit` async (ninguna prueba su estado transitorio pre-resolución) — no es un gap específico de este spec, pero queda sin cerrar en todo el codebase.

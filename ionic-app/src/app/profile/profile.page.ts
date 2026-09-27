@@ -9,6 +9,7 @@ import {
   helpCircleOutline,
   logOutOutline,
   starOutline,
+  trendingUpOutline,
 } from 'ionicons/icons';
 
 import { HeaderComponent } from '../shared/layout/header/header.component';
@@ -36,11 +37,12 @@ interface ProfileStats {
   notesPublished: number;
 }
 
-// Ported 1:1 from src/app/(protected)/profile/page.tsx, minus the "Modo
-// creador" card (linked to /profile/creator in the MVP) — that dashboard is
-// out of scope per Boundaries/Never (see deferred-work.md), so it isn't
-// ported here either; Approach only lists user data + 3 stats + the 5-item
-// menu + logout.
+// Ported 1:1 from src/app/(protected)/profile/page.tsx, including the "Modo
+// creador" card (linked to /profile/creator, page.tsx líneas 132-144) —
+// restored by spec-cap-6-creator-dashboard now that /profile/creator itself
+// exists; CAP-6 had left it out per Boundaries/Never at the time (see
+// deferred-work.md:178-179), while /profile carried user data + 3 stats +
+// the 5-item menu + logout.
 //
 // Decision (human, 2026-09-27, documented in Intent): the MVP is read-only,
 // but this page adds inline editing of full_name/major via
@@ -90,6 +92,7 @@ export class ProfilePage implements OnInit {
 
   readonly chevronIcon = chevronForwardOutline;
   readonly logOutIcon = logOutOutline;
+  readonly trendingUpIcon = trendingUpOutline;
 
   // Ported from profile/page.tsx's menuItems (líneas 52-83): same 5 entries,
   // same order, same dead-link ('#') entries for payment methods/help (Never).
