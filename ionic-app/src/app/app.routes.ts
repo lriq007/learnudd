@@ -67,6 +67,22 @@ export const routes: Routes = [
     canActivate: [protectedGuard],
   },
   {
+    // CAP-4: TutorCard (CAP-2) already links here; was falling into the
+    // catch-all below until this spec built the page.
+    path: 'explore/tutors/:id',
+    loadComponent: () => import('./tutor-detail/tutor-detail.page').then((m) => m.TutorDetailPage),
+    canActivate: [protectedGuard],
+  },
+  {
+    // CAP-4: registered per Code Map/Design Notes even though no in-app nav
+    // link points here yet — CAP-6 (Profile) adds the "Mis reservas" menu
+    // item, same accepted pattern as /publish/note before its chooser
+    // existed.
+    path: 'bookings',
+    loadComponent: () => import('./bookings/bookings.page').then((m) => m.BookingsPage),
+    canActivate: [protectedGuard],
+  },
+  {
     path: '',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
     canActivate: [protectedGuard],
@@ -80,9 +96,11 @@ export const routes: Routes = [
     // doesn't ask to retarget the wildcard itself. CAP-3: /library and
     // /explore/notes/:id are real routes now (registered above), no longer
     // caught here. CAP-3 (resto, spec-cap-3-publish-note): /publish and
-    // /publish/note are real routes too now; /publish/tutor (CAP-4, "Ofrecer
-    // clases") still falls here, per Boundaries — a deliberate, already
-    // accepted pattern, not a gap this spec introduces.
+    // /publish/note are real routes too now. CAP-4: /explore/tutors/:id and
+    // /bookings are real routes too now (registered above), no longer
+    // caught here; /publish/tutor (CAP-4, "Ofrecer clases") still falls
+    // here, per Boundaries — a deliberate, already accepted pattern, not a
+    // gap this spec introduces.
     path: '**',
     redirectTo: 'kit',
   },

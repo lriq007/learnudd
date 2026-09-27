@@ -10,6 +10,7 @@ interface QueryMock {
   or: ReturnType<typeof vi.fn>;
   contains: ReturnType<typeof vi.fn>;
   limit: ReturnType<typeof vi.fn>;
+  single: ReturnType<typeof vi.fn>;
   then: <T>(onFulfilled: (value: { data: unknown }) => T) => Promise<T>;
 }
 
@@ -20,6 +21,7 @@ function createQueryMock(result: { data: unknown }): QueryMock {
     or: vi.fn(() => mock),
     contains: vi.fn(() => mock),
     limit: vi.fn(() => mock),
+    single: vi.fn(() => mock),
     then: (onFulfilled) => Promise.resolve(result).then(onFulfilled),
   };
   return mock;
@@ -79,5 +81,36 @@ describe('TutorsService', () => {
     expect(query.or).not.toHaveBeenCalled();
     expect(query.contains).not.toHaveBeenCalled();
     expect(query.eq).toHaveBeenCalledWith('verified', true);
+  });
+
+  // CAP-4: I/O matrix "Perfil de tutor válido" / "Tutor inexistente".
+  describe('getById()', () => {
+    it('resuelve null cuando Supabase no está configurado (cliente null)', async () => {
+      const service = setup(null);
+
+      await expect(service.getById('t1')).resolves.toBeNull();
+    });
+
+    it('pide el tutor por id con sus joins (paridad tutors/[id]/page.tsx líneas 44-51)', async () => {
+      const tutor = { id: 't1' };
+      const query = createQueryMock({ data: tutor });
+      const from = vi.fn(() => query);
+      const service = setup({ from });
+
+      const result = await service.getById('t1');
+
+      expect(from).toHaveBeenCalledWith('tutors');
+      expect(query.select).toHaveBeenCalledWith('*, user:profiles(*), courses:tutor_courses(*)');
+      expect(query.eq).toHaveBeenCalledWith('id', 't1');
+      expect(query.single).toHaveBeenCalled();
+      expect(result).toBe(tutor);
+    });
+
+    it('resuelve null cuando no hay match (`.single()` sin fila → data null/undefined)', async () => {
+      const query = createQueryMock({ data: null });
+      const service = setup({ from: vi.fn(() => query) });
+
+      await expect(service.getById('sin-match')).resolves.toBeNull();
+    });
   });
 });

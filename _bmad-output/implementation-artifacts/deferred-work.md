@@ -93,3 +93,43 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-cap-3-publish-note.md`
   summary: `ionic-app/angular.json` tiene una clave `"cli.analytics"` con un UUID que no corresponde a ningún spec — quedó en el working tree antes de este spec (generada localmente por el CLI de Angular/Ionic la primera vez que corrió `ng`/`ionic` en esta máquina).
   evidence: Hallazgo de review (blind-hunter) sobre este spec. Verificado que la modificación ya existía en el working tree al iniciar este spec — ruido de tooling local, no relacionado a ninguna feature. Revisar si conviene revertirla o agregar esa clave al `.gitignore`/config para que no vuelva a ensuciar diffs futuros.
+
+- source_spec: none
+  summary: CAP-4 (resto) — Publicar tutoría en Ionic+Angular: chooser "Ofrecer clases" (`/publish/tutor`) y el wizard de publicación de tutoría, análogos al chooser/wizard de publicar apunte de CAP-3.
+  evidence: Split del intent de CAP-4 (perfil de tutor + reservas + publicación de tutoría) por ser un journey de usuario distinto (lado creador vs. lado consumidor) — mismo criterio ya aplicado al separar "Publicar apunte" de CAP-3 Notes Marketplace. Se prioriza perfil de tutor + reservas porque ya tiene tráfico entrante real desde `TutorCard`/`explore` de CAP-2.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-tutor-bookings.md`
+  summary: `BookingsService.create()` hace el insert en `bookings` y el `update` de `tutor_schedules.available = false` como dos llamadas separadas, sin transacción — si dos estudiantes seleccionan el mismo horario casi al mismo tiempo, ambos inserts pueden completarse antes de que cualquiera de los dos updates corra, dejando el horario doble-reservado.
+  evidence: Ported literal desde `handleBooking` (tutor detail MVP, líneas 87-105), que tiene exactamente el mismo hueco (dos llamadas Supabase separadas, sin RPC transaccional). Boundaries/Never de este spec excluye explícitamente "resolver la race condition de horario" — paridad fiel. Revisar cuando se decida reforzar reservas contra condiciones de carrera reales (probablemente una función RPC de Postgres que haga insert+update atómico, o un constraint `unique` sobre `schedule_id` en `bookings`).
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-tutor-bookings.md`
+  summary: Ni `TutorDetailPage.loadTutor()`/`handleBooking()` ni `BookingsPage.ngOnInit()` manejan un rechazo real (falla de red) de `TutorsService.getById()`/`BookingsService.getSchedules()`/`getRatings()`/`create()`/`listForStudent()` — un `reject()` real deja `loading()`/`booking()` en `true` para siempre sin ningún toast ni feedback. `handleBooking()` tampoco tiene guarda anti doble-tap (nada impide dos clicks rápidos en "Reservar horario" mientras `booking()` sigue en `true`, más allá de que el botón ya está deshabilitado — un doble-tap muy rápido en el frame anterior al primer `set(true)` alcanzaría a disparar dos llamadas a `create()`).
+  evidence: Hallazgo verificado contra el MVP línea por línea — `explore/tutors/[id]/page.tsx` y `bookings/page.tsx` tienen exactamente los mismos huecos (ningún `try/catch` alrededor de sus llamadas a Supabase, ningún guard anti doble-click en `handleBooking`). Paridad fiel; el Never de este spec excluye explícitamente "agregar manejo de errores de red" y "guarda anti doble-tap". Mismo patrón general ya documentado para Notes/Tutors/FavoritesService en el item de CAP-2, y para note-detail/library en el de CAP-3. Revisar junto con esos ítems cuando se decida agregar manejo de errores real (momento de Supabase real conectado, item de CAP-1).
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-tutor-bookings.md`
+  summary: `BookingsService.create()` descarta el `{error}` del segundo `update` (`tutor_schedules.available = false`) — si ese update falla, igual devuelve `{error: null}` y el usuario ve el toast de éxito aunque el horario nunca quedó marcado no disponible.
+  evidence: Hallazgo de review (blind-hunter). Verificado que el MVP (`handleBooking`, líneas 100-104) tiene exactamente el mismo hueco — no desestructura el `error` de ese segundo `update`. Paridad fiel, excluida por el Never de este spec ("manejo de errores de red"); mismo patrón ya diferido para `NotesService.purchase()` en CAP-3 (update de `notes.downloads`).
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-tutor-bookings.md`
+  summary: El botón de mensaje/chat ícono-only en el perfil de tutor (`tutor-detail.page.html`) no tiene `aria-label`.
+  evidence: Hallazgo de review (blind-hunter). Verificado que el MVP tiene el mismo botón sin `aria-label`. Paridad fiel, misma clase de gap de accesibilidad ya diferida para los botones ícono-only de CAP-2 (limpiar-búsqueda/toggle-filtros en Explore) — resolver en una pasada de accesibilidad dedicada sobre toda la app.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-tutor-bookings.md`
+  summary: `booking.payment_amount` en 0 se muestra como `-` en vez de `$0` formateado en `bookings.page.html`, por un operador ternario que trata `0` como falsy.
+  evidence: Hallazgo de review (blind-hunter). Verificado que el MVP tiene exactamente el mismo ternario (`booking.payment_amount ? formatCLP(...) : '-'`). Paridad fiel — revisar si se decide tratar `payment_amount === 0` como un valor legítimo distinto de "sin monto".
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-tutor-bookings.md`
+  summary: `BookingsPage.upcoming()`/`past()` comparan la fecha del horario (medianoche local) contra la hora actual — una reserva de hoy más tarde cae en "Anteriores" apenas pasa la medianoche, horas antes de la clase real.
+  evidence: Hallazgo de review (blind-hunter). Verificado que el MVP tiene exactamente la misma comparación (`bookings/page.tsx`). Cumple explícitamente el Always de este spec ("paridad exacta con el MVP"), no es un defecto introducido por este story — revisar si se decide comparar por fecha+hora de fin de la clase en vez de solo la fecha.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-tutor-bookings.md`
+  summary: `BookingsService.create()` cae a modality `'presencial'` cuando `tutor.modalities` está vacío (`[]`), registrando una modalidad que el tutor nunca configuró.
+  evidence: Hallazgo de review (blind-hunter + edge-case-hunter). Verificado que el MVP tiene exactamente el mismo fallback (`tutor.modalities.includes('online') ? 'online' : 'presencial'`). Paridad fiel — revisar si se decide validar que un tutor tenga al menos una modalidad configurada antes de permitir reservas.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-tutor-bookings.md`
+  summary: `<app-toast>` en `tutor-detail.page.html` no usa `positionAnchor`, pudiendo quedar oculto detrás de la barra de acciones fija inferior (`.tutor-detail-actions`).
+  evidence: Hallazgo de review (blind-hunter). El mismo gap ya existe en `note-detail.page.html` (código preexistente de CAP-3, no tocado por este diff) — no es un defecto introducido por este story. Revisar junto con `note-detail` cuando se decida ajustar `positionAnchor` en páginas con barra de acciones fija.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-4-tutor-bookings.md`
+  summary: `ionic-app/angular.json` sigue teniendo la clave `"cli.analytics"` con un UUID sin relación a ninguna feature.
+  evidence: Hallazgo de review (blind-hunter) sobre este spec. Confirmado que esta modificación ya estaba presente en el working tree antes de que este spec empezara — mismo ruido de tooling local ya documentado en el ítem de `spec-cap-3-publish-note.md` más arriba, todavía sin resolver.

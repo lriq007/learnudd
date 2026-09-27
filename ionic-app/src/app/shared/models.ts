@@ -84,6 +84,55 @@ export interface Tutor {
   ratings_count?: number;
 }
 
+// CAP-4: ported from src/types/index.ts (TutorSchedule líneas 97-106,
+// TutorRating líneas 108-117, BookingStatus/PaymentStatus líneas 119-120,
+// Booking líneas 123-140) for the tutor detail and bookings pages.
+// PaymentMethod is not ported — no payment gateway integration in either
+// app (Boundaries: "sin pasarela de pago real"), so nothing here reads it.
+export interface TutorSchedule {
+  id: string;
+  tutor_id: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  available: boolean;
+  recurring: boolean;
+  created_at: string;
+}
+
+export interface TutorRating {
+  id: string;
+  user_id: string;
+  tutor_id: string;
+  rating: number;
+  comment: string | null;
+  verified_class: boolean;
+  created_at: string;
+  user?: Profile;
+}
+
+export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
+export type PaymentStatus = 'pending' | 'paid' | 'refunded';
+
+export interface Booking {
+  id: string;
+  student_id: string;
+  tutor_id: string;
+  schedule_id: string | null;
+  course: string;
+  modality: 'presencial' | 'online';
+  status: BookingStatus;
+  payment_status: PaymentStatus;
+  payment_amount: number | null;
+  notes: string | null;
+  meeting_link: string | null;
+  location: string | null;
+  created_at: string;
+  tutor?: Tutor;
+  student?: Profile;
+  schedule?: TutorSchedule;
+}
+
 export interface Favorite {
   id: string;
   user_id: string;

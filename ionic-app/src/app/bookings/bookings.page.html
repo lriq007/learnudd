@@ -1,0 +1,82 @@
+<app-header title="Mis reservas" [showBack]="true"></app-header>
+
+<ion-content class="bookings-content">
+  <div class="bookings-page">
+    <div class="bookings-tabs">
+      <app-button
+        [fullWidth]="true"
+        size="sm"
+        [variant]="activeTab() === 'upcoming' ? 'primary' : 'ghost'"
+        (click)="setTab('upcoming')"
+      >
+        Próximas ({{ upcoming().length }})
+      </app-button>
+      <app-button
+        [fullWidth]="true"
+        size="sm"
+        [variant]="activeTab() === 'past' ? 'primary' : 'ghost'"
+        (click)="setTab('past')"
+      >
+        Anteriores ({{ past().length }})
+      </app-button>
+    </div>
+
+    @if (loading()) {
+      <div class="bookings-list">
+        @for (i of skeletonRows; track i) {
+          <app-skeleton height="8rem"></app-skeleton>
+        }
+      </div>
+    } @else if (filtered().length > 0) {
+      <div class="bookings-list">
+        @for (booking of filtered(); track booking.id) {
+          <app-card>
+            <div class="bookings-item__header">
+              <div class="bookings-item__tutor">
+                <div class="bookings-item__avatar">
+                  <span>{{ getInitials(booking.tutor?.user?.full_name || 'TU') }}</span>
+                </div>
+                <div>
+                  <h3 class="bookings-item__name">{{ booking.tutor?.user?.full_name || 'Tutor' }}</h3>
+                  <p class="bookings-item__course">{{ booking.course }}</p>
+                </div>
+              </div>
+              <app-badge [variant]="badgeVariant(booking.status)" size="sm">{{ statusLabels[booking.status] }}</app-badge>
+            </div>
+
+            @if (booking.schedule) {
+              <div class="bookings-item__meta">
+                <span>
+                  <ion-icon [icon]="calendarIcon"></ion-icon>
+                  {{ formatBookingDate(booking.schedule.date) }}
+                </span>
+                <span>
+                  <ion-icon [icon]="timeIcon"></ion-icon>
+                  {{ formatTime(booking.schedule.start_time) }} - {{ formatTime(booking.schedule.end_time) }}
+                </span>
+                <span>
+                  <ion-icon [icon]="booking.modality === 'online' ? videoIcon : locationIcon"></ion-icon>
+                  {{ booking.modality }}
+                </span>
+              </div>
+            }
+
+            <div class="bookings-item__footer">
+              <span class="bookings-item__price">{{ booking.payment_amount ? formatCLP(booking.payment_amount) : '-' }}</span>
+              <app-button variant="ghost" size="sm" (click)="goToChat(booking.tutor?.user_id)">
+                <ion-icon [icon]="chatIcon"></ion-icon>
+                Chat
+              </app-button>
+            </div>
+          </app-card>
+        }
+      </div>
+    } @else {
+      <app-empty-state [title]="emptyTitle()" description="Explora tutores y reserva una clase">
+        <span slot="action">
+          <app-button size="sm" (click)="goExplore()">Explorar tutores</app-button>
+        </span>
+      </app-empty-state>
+    }
+  </div>
+</ion-content>

@@ -47,4 +47,20 @@ export class TutorsService {
     const { data } = await query;
     return (data as Tutor[] | null) ?? [];
   }
+
+  // CAP-4: ported from src/app/(protected)/explore/tutors/[id]/page.tsx
+  // (fetchTutor, líneas 44-51). Same null-client / `.single()` fail-soft
+  // convention as NotesService.getById().
+  async getById(id: string): Promise<Tutor | null> {
+    const client = this.supabaseService.client;
+    if (!client) return null;
+
+    const { data } = await client
+      .from('tutors')
+      .select('*, user:profiles(*), courses:tutor_courses(*)')
+      .eq('id', id)
+      .single();
+
+    return (data as Tutor | null) ?? null;
+  }
 }

@@ -7,10 +7,14 @@ import { routes } from './app.routes';
 import { AuthService } from './shared/state/auth.service';
 import { NotesService } from './shared/state/notes.service';
 import { FavoritesService } from './shared/state/favorites.service';
+import { TutorsService } from './shared/state/tutors.service';
+import { BookingsService } from './shared/state/bookings.service';
 import { NoteDetailPage } from './note-detail/note-detail.page';
 import { LibraryPage } from './library/library.page';
 import { PublishPage } from './publish/publish.page';
 import { PublishNotePage } from './publish-note/publish-note.page';
+import { TutorDetailPage } from './tutor-detail/tutor-detail.page';
+import { BookingsPage } from './bookings/bookings.page';
 
 // Review fix: every other spec provides `provideRouter([])` (an empty route
 // table) or stubs `ActivatedRoute` directly, so nothing previously resolved
@@ -26,6 +30,12 @@ describe('app.routes', () => {
       listPurchased: vi.fn().mockResolvedValue([]),
     };
     const favoritesServiceStub = { checkFavorite: vi.fn().mockResolvedValue(false) };
+    const tutorsServiceStub = { getById: vi.fn().mockResolvedValue(null) };
+    const bookingsServiceStub = {
+      getSchedules: vi.fn().mockResolvedValue([]),
+      getRatings: vi.fn().mockResolvedValue([]),
+      listForStudent: vi.fn().mockResolvedValue([]),
+    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -33,6 +43,8 @@ describe('app.routes', () => {
         { provide: AuthService, useValue: authStub },
         { provide: NotesService, useValue: notesServiceStub },
         { provide: FavoritesService, useValue: favoritesServiceStub },
+        { provide: TutorsService, useValue: tutorsServiceStub },
+        { provide: BookingsService, useValue: bookingsServiceStub },
       ],
     });
 
@@ -107,6 +119,42 @@ describe('app.routes', () => {
     const harness = await RouterTestingHarness.create();
 
     await harness.navigateByUrl('/publish/note');
+
+    expect(router.url).toBe('/login');
+  });
+
+  it('usuario autenticado: /explore/tutors/:id activa TutorDetailPage', async () => {
+    setup({ id: 'u1', onboarding_completed: true });
+    const harness = await RouterTestingHarness.create();
+
+    const component = await harness.navigateByUrl('/explore/tutors/t1');
+
+    expect(component).toBeInstanceOf(TutorDetailPage);
+  });
+
+  it('sin sesión: /explore/tutors/:id redirige a /login (protectedGuard)', async () => {
+    const { router } = setup(null);
+    const harness = await RouterTestingHarness.create();
+
+    await harness.navigateByUrl('/explore/tutors/t1');
+
+    expect(router.url).toBe('/login');
+  });
+
+  it('usuario autenticado: /bookings activa BookingsPage', async () => {
+    setup({ id: 'u1', onboarding_completed: true });
+    const harness = await RouterTestingHarness.create();
+
+    const component = await harness.navigateByUrl('/bookings');
+
+    expect(component).toBeInstanceOf(BookingsPage);
+  });
+
+  it('sin sesión: /bookings redirige a /login (protectedGuard)', async () => {
+    const { router } = setup(null);
+    const harness = await RouterTestingHarness.create();
+
+    await harness.navigateByUrl('/bookings');
 
     expect(router.url).toBe('/login');
   });
