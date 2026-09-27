@@ -1,0 +1,10 @@
+<div class="app-empty-state">
+  @if (icon()) {
+    <div class="app-empty-state__icon">
+      <ng-content select="[slot=icon]"></ng-content>
+    </div>
+  }
+  <h3 class="app-empty-state__title">{{ title() }}</h3>
+  <p class="app-empty-state__description">{{ description() }}</p>
+  <ng-content select="[slot=action]"></ng-content>
+</div>

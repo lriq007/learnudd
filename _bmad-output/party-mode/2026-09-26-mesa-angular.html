@@ -1,0 +1,323 @@
+<title>Mesa Angular</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#F2F4F5;
+  --surface:#FFFFFF;
+  --surface-2:#EAEDEF;
+  --ink:#171A1F;
+  --ink-dim:#5B6470;
+  --rule:#D8DEE3;
+  --accent:#B8102C;
+  --accent-soft:rgba(184,16,44,0.09);
+  --amber:#8A5A00;
+  --amber-soft:rgba(138,90,0,0.10);
+  --shadow: 0 1px 2px rgba(20,24,28,0.04), 0 8px 24px rgba(20,24,28,0.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1116;
+    --surface:#161A20;
+    --surface-2:#1C2128;
+    --ink:#E7EAEE;
+    --ink-dim:#8B95A1;
+    --rule:#262C34;
+    --accent:#E2455C;
+    --accent-soft:rgba(226,69,92,0.14);
+    --amber:#E3A63E;
+    --amber-soft:rgba(227,166,62,0.12);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px rgba(0,0,0,0.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1116;
+  --surface:#161A20;
+  --surface-2:#1C2128;
+  --ink:#E7EAEE;
+  --ink-dim:#8B95A1;
+  --rule:#262C34;
+  --accent:#E2455C;
+  --accent-soft:rgba(226,69,92,0.14);
+  --amber:#E3A63E;
+  --amber-soft:rgba(227,166,62,0.12);
+  --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px rgba(0,0,0,0.35);
+}
+
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  line-height:1.6;
+}
+h1,h2,h3{font-family:'Newsreader', Georgia, 'Times New Roman', serif; text-wrap:balance; margin:0;}
+.mono{font-family:'IBM Plex Mono', 'SF Mono', Consolas, monospace;}
+
+.wrap{max-width:760px; margin:0 auto; padding:4.5rem 1.5rem 6rem;}
+
+/* ---------- header ---------- */
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:0.72rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin:0 0 0.9rem;
+}
+h1{font-size:clamp(2.2rem, 5vw, 3.1rem); font-weight:500; letter-spacing:-0.01em;}
+.dek{
+  color:var(--ink-dim);
+  font-size:1.05rem;
+  max-width:34rem;
+  margin:0.9rem 0 1.8rem;
+}
+.attendees{display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.4rem;}
+.chip{
+  display:inline-flex; align-items:center; gap:0.4rem;
+  background:var(--surface); border:1px solid var(--rule);
+  border-radius:999px; padding:0.32rem 0.8rem 0.32rem 0.6rem;
+  font-size:0.82rem; color:var(--ink-dim);
+}
+.chip b{color:var(--ink); font-weight:500;}
+.meta{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:0.78rem; color:var(--ink-dim);
+  margin-top:1.4rem;
+}
+
+/* ---------- decision spine ---------- */
+.spine{
+  margin:3.2rem 0 3.6rem;
+  border-top:1px solid var(--rule);
+  padding-top:1.4rem;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:1.1rem;
+}
+@media (max-width:680px){ .spine{grid-template-columns:1fr 1fr;} }
+.tick{position:relative; padding-top:0.7rem;}
+.tick::before{
+  content:""; position:absolute; top:-1.4rem; left:0;
+  width:1px; height:0.7rem; background:var(--rule);
+}
+.tick-num{
+  font-family:'IBM Plex Mono', monospace; font-size:0.72rem;
+  color:var(--accent); letter-spacing:0.04em;
+}
+.tick-label{
+  font-family:'IBM Plex Mono', monospace; font-size:0.68rem;
+  text-transform:uppercase; letter-spacing:0.08em;
+  color:var(--ink-dim); margin:0.15rem 0 0.35rem;
+}
+.tick-body{font-size:0.86rem; color:var(--ink);}
+.pulse-wrap{display:inline-flex; align-items:center; gap:0.4rem;}
+.pulse{
+  width:6px; height:6px; border-radius:50%; background:var(--accent);
+  animation:pulse 2.4s ease-in-out infinite;
+  flex:none;
+}
+@media (prefers-reduced-motion:reduce){ .pulse{animation:none;} }
+@keyframes pulse{
+  0%,100%{ box-shadow:0 0 0 0 var(--accent-soft); opacity:1;}
+  50%{ box-shadow:0 0 0 6px var(--accent-soft); opacity:0.7;}
+}
+
+/* ---------- movements ---------- */
+.movement{ margin-top:3.6rem; opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .5s ease;}
+.movement.in{ opacity:1; transform:translateY(0); }
+@media (prefers-reduced-motion:reduce){ .movement{opacity:1; transform:none; transition:none;} }
+.movement h2{
+  font-size:1.5rem; font-style:italic; font-weight:500;
+  color:var(--ink); margin-bottom:0.3rem;
+}
+.movement .sub{ color:var(--ink-dim); font-size:0.92rem; margin-bottom:1.3rem;}
+
+.line{
+  display:flex; gap:0.85rem; align-items:flex-start;
+  padding:0.55rem 0; border-bottom:1px solid transparent;
+}
+.line .icon{ font-size:1.15rem; line-height:1.5; flex:none; width:1.6rem; text-align:center;}
+.line .who{
+  font-family:'IBM Plex Mono', monospace; font-size:0.78rem;
+  color:var(--ink-dim); display:block; margin-bottom:0.1rem;
+}
+.line .say{ font-size:0.98rem;}
+.line .say em{ color:var(--ink-dim); font-style:italic;}
+
+.callout{
+  margin:1.5rem 0 0.5rem;
+  background:var(--amber-soft);
+  border:1px solid var(--amber);
+  border-radius:10px;
+  padding:1rem 1.2rem;
+}
+.callout .who{ color:var(--amber); }
+.callout ul{ margin:0.5rem 0 0; padding-left:1.15rem; font-size:0.92rem;}
+.callout li{ margin:0.35rem 0; }
+
+.codebox{
+  margin:1.2rem 0;
+  background:var(--surface-2);
+  border:1px solid var(--rule);
+  border-radius:10px;
+  overflow-x:auto;
+  box-shadow:var(--shadow);
+}
+.codebox .bar{
+  display:flex; align-items:center; gap:0.5rem;
+  padding:0.55rem 0.9rem;
+  border-bottom:1px solid var(--rule);
+  font-family:'IBM Plex Mono', monospace; font-size:0.72rem;
+  color:var(--ink-dim);
+}
+.codebox pre{
+  margin:0; padding:1rem 1.2rem;
+  font-family:'IBM Plex Mono', monospace; font-size:0.82rem;
+  line-height:1.65; color:var(--ink); white-space:pre;
+}
+.codebox .tag{color:var(--accent);}
+
+blockquote{
+  font-family:'Newsreader', serif; font-style:italic; font-size:1.15rem;
+  color:var(--ink); border-left:2px solid var(--accent);
+  padding-left:1rem; margin:1.4rem 0;
+}
+
+hr.rule{border:none; border-top:1px solid var(--rule); margin:3.4rem 0 2.2rem;}
+
+footer{
+  font-family:'IBM Plex Mono', monospace; font-size:0.78rem;
+  color:var(--ink-dim); display:flex; justify-content:space-between;
+  flex-wrap:wrap; gap:0.5rem;
+}
+footer .stamp{color:var(--accent);}
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">Party Mode · Minuta de sesión</p>
+  <h1>Mesa Angular</h1>
+  <p class="dek">El consejo BMAD se sienta con Lucas a decidir cómo <span class="mono">learnudd</span> deja de ser Next.js y se convierte en Ionic + Angular — sin perder Supabase, ni el camino a producción.</p>
+
+  <div class="attendees">
+    <span class="chip">📋 <b>John</b> · PM</span>
+    <span class="chip">🏗️ <b>Winston</b> · Arquitecto</span>
+    <span class="chip">💻 <b>Amelia</b> · Dev</span>
+    <span class="chip">🎨 <b>Sally</b> · UX</span>
+    <span class="chip">🧪 <b>Murat</b> · QA</span>
+    <span class="chip">📊 <b>Mary</b> · Analista</span>
+  </div>
+  <p class="meta">learnudd — marketplace de apuntes y tutorías UDD · 26 sep 2026</p>
+
+  <div class="spine">
+    <div class="tick"><div class="tick-num">01</div><div class="tick-label">Alcance</div><div class="tick-body">Migración completa a Ionic + Angular</div></div>
+    <div class="tick"><div class="tick-num">02</div><div class="tick-label">Backend</div><div class="tick-body">Supabase se mantiene intacto</div></div>
+    <div class="tick"><div class="tick-num">03</div><div class="tick-label">Plataforma</div><div class="tick-body">Web en Vercel primero, Capacitor después</div></div>
+    <div class="tick"><div class="tick-num">04</div><div class="tick-label">Transición</div><div class="tick-body">Corte limpio — el código no se borra</div></div>
+    <div class="tick">
+      <div class="tick-num">05</div><div class="tick-label">Arquitectura</div>
+      <div class="tick-body pulse-wrap"><span class="pulse"></span> Standalone + Signals + ngModel</div>
+    </div>
+  </div>
+
+  <!-- ================= MOVEMENT I ================= -->
+  <section class="movement">
+    <h2>I. El giro</h2>
+    <p class="sub">Lucas trae el mandato del profesor. La sala no lo esperaba tan literal.</p>
+
+    <div class="line"><span class="icon">📋</span><div><span class="who">JOHN</span><span class="say">"Ionic. Angular. Repite eso."</span></div></div>
+    <div class="line"><span class="icon">🏗️</span><div><span class="who">WINSTON</span><span class="say">Ionic + Angular no se <em>agrega</em> al stack — es reescribir el frontend completo. Esto no es una actualización.</span></div></div>
+    <div class="line"><span class="icon">💻</span><div><span class="who">AMELIA</span><span class="say">Traducido a rutas de archivo: todo <span class="mono">src/app/**</span> con App Router se tira. Necesito saber si eso es literal.</span></div></div>
+    <div class="line"><span class="icon">🎨</span><div><span class="who">SALLY</span><span class="say">¿Es una app que se instala en el teléfono, o algo que se abre en el navegador vía Vercel?</span></div></div>
+    <div class="line"><span class="icon">📊</span><div><span class="who">MARY</span><span class="say">Separemos lo que el profesor <em>exige</em> de lo que <em>evalúa</em>. Quiero evidencia, no interpretación.</span></div></div>
+  </section>
+
+  <!-- ================= MOVEMENT II ================= -->
+  <section class="movement">
+    <h2>II. El corte</h2>
+    <p class="sub">Migración total confirmada. Se define cómo se transita sin perder terreno.</p>
+
+    <blockquote>"Corte limpio" = no se borra el código, no se pierde el historial. Deja de recibir desarrollo nuevo — todo el esfuerzo va al Ionic + Angular.</blockquote>
+
+    <div class="line"><span class="icon">🏗️</span><div><span class="who">WINSTON</span><span class="say">Construye el Ionic + Angular como SPA pura, sin SSR. Ese mismo build es el que después envuelve Capacitor para iOS/Android — web primero, misma base, mobile después, sin retrabajo.</span></div></div>
+    <div class="line"><span class="icon">💻</span><div><span class="who">AMELIA</span><span class="say"><span class="mono">@supabase/supabase-js</span> no sabe ni le importa si lo llama React o Angular. Lo que se reescribe entero: Auth flow, routing, cada componente.</span></div></div>
+  </section>
+
+  <!-- ================= MOVEMENT III ================= -->
+  <section class="movement">
+    <h2>III. El inventario</h2>
+    <p class="sub">Amelia baja al código. 19 rutas, 7 dominios, leídos línea por línea — no supuestos.</p>
+
+    <div class="line"><span class="icon">💻</span><div><span class="who">AMELIA</span><span class="say">Auth & Onboarding · Home / Discovery · Notes Marketplace · Tutoring / Bookings · Messaging (Supabase Realtime) · Profile & Creator Dashboard · UI kit compartido — nada de este último se salva, Ionic trae su propia librería <span class="mono">ion-*</span>.</span></div></div>
+
+    <div class="callout">
+      <span class="who">🧪 MURAT — hallazgos que no piden permiso</span>
+      <ul>
+        <li>Dashboard de creador: ingresos siempre en <span class="mono">0</span> (<span class="mono">.in('note_id', [])</span> vacío).</li>
+        <li>Filtro de tabs en biblioteca sin implementar (<span class="mono">// TODO</span>).</li>
+        <li>La "compra" de un apunte es un pago simulado (<span class="mono">setTimeout</span>, sin pasarela real).</li>
+        <li>Credenciales de demo hardcodeadas visibles en el login.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= MOVEMENT IV ================= -->
+  <section class="movement">
+    <h2>IV. La base</h2>
+    <p class="sub">El "desde": standalone, signals, control de flujo moderno, <span class="mono">ngModel</span>. Con ejemplo, no con promesa.</p>
+
+    <div class="line"><span class="icon">🏗️</span><div><span class="who">WINSTON</span><span class="say">Standalone components — sin <span class="mono">NgModule</span>, cada componente declara sus propios imports.</span></div></div>
+    <div class="line"><span class="icon">💻</span><div><span class="who">AMELIA</span><span class="say">Signals y <span class="mono">computed()</span> para el estado; <span class="mono">@if</span> / <span class="mono">@for</span> / <span class="mono">@empty</span> en el template. Es el default de Angular moderno, no una librería extra.</span></div></div>
+
+    <div class="codebox">
+      <div class="bar">explore.component.html</div>
+      <pre>@<span class="tag">if</span> (filtered().length &gt; 0) {
+  &lt;ion-list&gt;
+    @<span class="tag">for</span> (note of filtered(); track note.id) {
+      &lt;ion-item&gt;{{ note.title }}&lt;/ion-item&gt;
+    } @<span class="tag">empty</span> {
+      &lt;ion-item&gt;No hay apuntes que coincidan.&lt;/ion-item&gt;
+    }
+  &lt;/ion-list&gt;
+} @<span class="tag">else</span> {
+  &lt;ion-spinner&gt;&lt;/ion-spinner&gt;
+}</pre>
+    </div>
+
+    <div class="line"><span class="icon">🏗️</span><div><span class="who">WINSTON</span><span class="say"><span class="mono">ngModel</span> sobre un signal no es el shorthand de siempre: <span class="mono">[ngModel]="email()" (ngModelChange)="email.set($event)"</span> — sigue siendo <span class="mono">FormsModule</span>, la señal solo vive por debajo.</span></div></div>
+  </section>
+
+  <hr class="rule">
+
+  <div class="line"><span class="icon">📋</span><div><span class="who">JOHN</span><span class="say">Con esto ya está toda la base técnica sobre la mesa. Mesa cerrada.</span></div></div>
+
+  <footer>
+    <span>Próximo paso: <b class="mono">bmad-spec</b>, en otra sesión.</span>
+    <span class="stamp">· acta guardada ·</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  try{
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      document.querySelectorAll('.movement').forEach(function(el){ el.classList.add('in'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, {threshold:0.15});
+    document.querySelectorAll('.movement').forEach(function(el){ obs.observe(el); });
+  }catch(e){
+    document.querySelectorAll('.movement').forEach(function(el){ el.classList.add('in'); });
+  }
+})();
+</script>

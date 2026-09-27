@@ -1,0 +1,92 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * Intentionally NOT imported: the current Next.js MVP has a single fixed
+ * light theme (see src/theme/variables.scss note at the bottom). Importing
+ * dark.system.css would change colors on OS dark-mode devices, which is a
+ * look-and-feel change the MVP doesn't have today.
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* Custom named colors used by the ported UI kit (ion-color-udd-gold /
+   ion-color-udd-info) so `color="udd-gold"` works the same way built-in
+   Ionic colors do. */
+.ion-color-udd-gold {
+  --ion-color-base: var(--ion-color-udd-gold);
+  --ion-color-base-rgb: var(--ion-color-udd-gold-rgb);
+  --ion-color-contrast: var(--ion-color-udd-gold-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-udd-gold-contrast-rgb);
+  --ion-color-shade: var(--ion-color-udd-gold-shade);
+  --ion-color-tint: var(--ion-color-udd-gold-tint);
+}
+
+.ion-color-udd-info {
+  --ion-color-base: var(--ion-color-udd-info);
+  --ion-color-base-rgb: var(--ion-color-udd-info-rgb);
+  --ion-color-contrast: var(--ion-color-udd-info-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-udd-info-contrast-rgb);
+  --ion-color-shade: var(--ion-color-udd-info-shade);
+  --ion-color-tint: var(--ion-color-udd-info-tint);
+}
+
+/* Ported 1:1 from src/app/globals.css — fade-in / btn-press / safe-bottom
+   are used verbatim by several ported components. */
+@keyframes udd-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.udd-fade-in {
+  animation: udd-fade-in var(--udd-duration-fade) ease-out;
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .udd-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+.udd-btn-press {
+  transition: transform var(--udd-duration-fast), opacity var(--udd-duration-fast);
+}
+
+.udd-btn-press:active {
+  transform: scale(0.98);
+}
+
+body {
+  font-family: var(--ion-font-family);
+}

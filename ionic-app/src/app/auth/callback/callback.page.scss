@@ -1,0 +1,23 @@
+.callback-content {
+  --background: var(--ion-background-color);
+}
+
+.callback-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  p {
+    color: var(--udd-gray);
+    margin: 0;
+  }
+}
+
+.callback-page__spinner {
+  width: 48px;
+  height: 48px;
+  color: var(--udd-blue);
+}

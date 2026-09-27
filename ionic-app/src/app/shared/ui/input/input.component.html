@@ -1,0 +1,21 @@
+<div class="app-input">
+  @if (label()) {
+    <label class="app-input__label" [for]="inputId()">{{ label() }}</label>
+  }
+  <ion-input
+    [id]="inputId()"
+    fill="outline"
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    [ngModel]="value()"
+    (ngModelChange)="value.set($event)"
+    class="app-input__field"
+    [class.app-input__field--error]="!!error()"
+  ></ion-input>
+  @if (error()) {
+    <p class="app-input__error">{{ error() }}</p>
+  } @else if (hint()) {
+    <p class="app-input__hint">{{ hint() }}</p>
+  }
+</div>

@@ -1,0 +1,11 @@
+<ion-toast
+  class="app-toast"
+  [isOpen]="isOpen()"
+  [message]="message()"
+  [duration]="duration()"
+  [color]="color()"
+  [buttons]="closeButtons()"
+  position="bottom"
+  [positionAnchor]="positionAnchor()"
+  (didDismiss)="onDidDismiss()"
+></ion-toast>

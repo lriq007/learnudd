@@ -1,0 +1,8 @@
+.app-toast {
+  --border-radius: var(--udd-radius-lg); // rounded-xl
+  --box-shadow: var(--udd-shadow-lg);
+  --min-width: 280px;
+  --max-width: 90vw;
+  font-weight: 500;
+  font-size: 0.875rem; // text-sm
+}

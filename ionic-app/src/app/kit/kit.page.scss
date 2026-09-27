@@ -1,0 +1,56 @@
+.kit-content {
+  --background: var(--ion-background-color);
+}
+
+.kit-page {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 16px 16px 96px; // clear the fixed Navbar + safe-bottom
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.kit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--udd-graphite);
+    margin: 0;
+  }
+
+  h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--udd-graphite);
+    margin: 8px 0 0;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--udd-gray);
+  }
+}
+
+.kit-section__hint {
+  font-size: 0.75rem;
+  color: var(--udd-gray);
+}
+
+.kit-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.kit-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

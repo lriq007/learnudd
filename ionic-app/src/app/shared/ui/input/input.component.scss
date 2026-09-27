@@ -1,0 +1,55 @@
+.app-input {
+  width: 100%;
+}
+
+.app-input__label {
+  display: block;
+  margin-bottom: 6px; // mb-1.5
+  font-size: 0.875rem; // text-sm
+  font-weight: 500; // font-medium
+  color: var(--udd-graphite);
+}
+
+.app-input__field {
+  --border-radius: var(--udd-radius-lg); // rounded-xl
+  --border-width: 1px;
+  --border-color: var(--udd-border-color);
+  --border-style: solid;
+  --background: #ffffff;
+  --color: var(--udd-graphite);
+  --placeholder-color: var(--udd-gray);
+  --placeholder-opacity: 0.6;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  width: 100%;
+  transition: box-shadow var(--udd-duration-fast) ease, border-color var(--udd-duration-fast) ease;
+}
+
+// Ionic adds a `has-focus` class to the ion-input host on focus.
+.app-input__field.has-focus {
+  --border-color: var(--ion-color-primary);
+  box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb), 0.2);
+}
+
+.app-input__field--error {
+  --border-color: var(--ion-color-danger);
+}
+
+.app-input__field--error.has-focus {
+  --border-color: var(--ion-color-danger);
+  box-shadow: 0 0 0 2px rgba(var(--ion-color-danger-rgb), 0.2);
+}
+
+.app-input__error {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  color: var(--ion-color-danger);
+}
+
+.app-input__hint {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  color: var(--udd-gray);
+}

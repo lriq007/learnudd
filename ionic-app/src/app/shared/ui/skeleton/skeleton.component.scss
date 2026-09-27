@@ -1,0 +1,9 @@
+// See skeleton.component.ts header comment: best-effort parity via the
+// public --background-rgb/--border-radius custom properties. Animation
+// speed (Ionic's fixed 1s vs the original 1.5s) is a known remaining gap.
+.app-skeleton {
+  --background-rgb: 0, 0, 0;
+  --border-radius: var(--udd-radius-md); // 8px, matches original .skeleton
+  margin: 0;
+  display: block;
+}

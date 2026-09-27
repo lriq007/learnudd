@@ -1,0 +1,83 @@
+// Ionic defaults this spec deliberately overrides for parity with the MVP's
+// Tailwind `Button.tsx` (all objective/measurable values — colors, radius,
+// spacing, timing — not subjective "does it look right" calls):
+//  - ion-button uppercases text by default → text-transform: none
+//  - ion-button's own --border-radius (4px) → --udd-radius-lg (12px, "rounded-xl")
+//  - Ionic disabled opacity already matches Tailwind's disabled:opacity-50 (kept as-is)
+
+.app-button {
+  --border-radius: var(--udd-radius-lg);
+  --box-shadow: none;
+  margin: 0;
+  text-transform: none;
+  font-weight: 600;
+  transition: transform var(--udd-duration-fast) ease, opacity var(--udd-duration-fast) ease;
+}
+
+.app-button::part(native) {
+  transition: background-color var(--udd-duration-fast) ease;
+}
+
+.app-button:active {
+  transform: scale(0.98); // .btn-press
+}
+
+// sizes — px/py from Button.tsx `sizes` map
+.app-button--sm {
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  font-size: 0.875rem; // text-sm
+}
+
+.app-button--md {
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  font-size: 0.875rem; // text-sm
+}
+
+.app-button--lg {
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+  font-size: 1rem; // text-base
+}
+
+// variants — hover/active shades approximate the original's `/90` `/80`
+// opacity hovers using the palette's own shade tokens (solid fills) since
+// Ionic's hover/activated states are background-color driven, not opacity.
+.app-button--primary {
+  --background-hover: var(--ion-color-primary-shade);
+  --background-activated: var(--ion-color-primary-shade);
+}
+
+.app-button--secondary {
+  --background-hover: var(--ion-color-secondary-shade);
+  --background-activated: var(--ion-color-secondary-shade);
+}
+
+.app-button--danger {
+  --background-hover: var(--ion-color-danger-shade);
+  --background-activated: var(--ion-color-danger-shade);
+}
+
+.app-button--outline {
+  --border-width: 2px; // border-2
+  --background-hover: rgba(var(--ion-color-primary-rgb), 0.05);
+  --background-activated: rgba(var(--ion-color-primary-rgb), 0.1);
+}
+
+.app-button--ghost {
+  --background-hover: rgba(var(--ion-color-dark-rgb), 0.05);
+  --background-activated: rgba(var(--ion-color-dark-rgb), 0.05);
+}
+
+.app-button__spinner {
+  width: 1rem;
+  height: 1rem;
+  margin-inline-end: 0.5rem;
+}

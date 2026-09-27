@@ -1,0 +1,199 @@
+<app-header title="Kit UI" [showCart]="true" [showNotifications]="true"></app-header>
+
+<ion-content class="kit-content">
+  <div class="kit-page">
+    <!-- Button -->
+    <section class="kit-section">
+      <h2>Button</h2>
+      <p class="kit-section__hint">5 variantes</p>
+      <div class="kit-row">
+        @for (variant of buttonVariants; track variant) {
+          <app-button [variant]="variant">{{ variant }}</app-button>
+        }
+      </div>
+      <p class="kit-section__hint">3 tamaños</p>
+      <div class="kit-row">
+        <app-button size="sm">sm</app-button>
+        <app-button size="md">md</app-button>
+        <app-button size="lg">lg</app-button>
+      </div>
+      <p class="kit-section__hint">Estados</p>
+      <div class="kit-row">
+        <app-button [loading]="buttonLoading()" (click)="toggleLoading()">
+          {{ buttonLoading() ? 'Cargando…' : 'Alternar loading' }}
+        </app-button>
+        <app-button [disabled]="true">Deshabilitado</app-button>
+        <app-button [fullWidth]="true">Ancho completo</app-button>
+      </div>
+    </section>
+
+    <!-- Card -->
+    <section class="kit-section">
+      <h2>Card</h2>
+      <div class="kit-col">
+        <app-card variant="default">Card default (shadow-sm)</app-card>
+        <app-card variant="elevated">Card elevated (shadow-md)</app-card>
+        <app-card variant="outlined">Card outlined (border)</app-card>
+        <app-card padding="none">Card padding=none</app-card>
+        <app-card padding="lg">Card padding=lg</app-card>
+      </div>
+    </section>
+
+    <!-- Input -->
+    <section class="kit-section">
+      <h2>Input</h2>
+      <div class="kit-col">
+        <app-input label="Nombre completo" placeholder="Escribe tu nombre" [(value)]="inputValue"></app-input>
+        <p class="kit-section__hint">Valor actual: "{{ inputValue() }}"</p>
+        <app-input
+          label="Correo UDD"
+          placeholder="tu.nombre@udd.cl"
+          hint="Debe ser tu correo institucional"
+          [(value)]="inputWithHint"
+        ></app-input>
+        <app-input label="Con error" [(value)]="inputWithError" error="Este campo es requerido"></app-input>
+      </div>
+    </section>
+
+    <!-- Badge -->
+    <section class="kit-section">
+      <h2>Badge</h2>
+      <div class="kit-row">
+        @for (variant of badgeVariants; track variant) {
+          <app-badge [variant]="variant">{{ variant }}</app-badge>
+        }
+      </div>
+      <div class="kit-row">
+        @for (variant of badgeVariants; track variant) {
+          <app-badge [variant]="variant" size="md">{{ variant }}</app-badge>
+        }
+      </div>
+    </section>
+
+    <!-- Skeleton -->
+    <section class="kit-section">
+      <h2>Skeleton</h2>
+      <p class="kit-section__hint">
+        Riesgo de paridad visual (shimmer) — ver Implementation Notes en el spec.
+      </p>
+      <div class="kit-col">
+        <app-skeleton width="60%" height="1.25rem"></app-skeleton>
+        <app-skeleton width="100%" height="1rem"></app-skeleton>
+        <app-skeleton width="40%" height="1rem"></app-skeleton>
+      </div>
+      <div class="kit-row">
+        <app-skeleton width="48px" height="48px"></app-skeleton>
+        <app-skeleton width="96px" height="64px"></app-skeleton>
+      </div>
+    </section>
+
+    <!-- Toast -->
+    <section class="kit-section">
+      <h2>Toast</h2>
+      <p class="kit-section__hint">
+        Riesgo de paridad visual (posicionamiento) — variante anclada sobre el Navbar y variante
+        sin anclar, para comparar.
+      </p>
+      <div class="kit-row">
+        <app-button size="sm" variant="primary" (click)="showToast('info', 'Guardado con éxito', true)"
+          >info (anclado)</app-button
+        >
+        <app-button size="sm" variant="danger" (click)="showToast('error', 'Ocurrió un error', true)"
+          >error (anclado)</app-button
+        >
+        <app-button size="sm" variant="secondary" (click)="showToast('warning', 'Revisa este campo', false)"
+          >warning (sin anclar)</app-button
+        >
+        <app-button size="sm" variant="outline" (click)="showToast('success', 'Todo listo', false)"
+          >success (sin anclar)</app-button
+        >
+      </div>
+      <app-toast
+        [(isOpen)]="toastOpenAnchored"
+        [message]="toastMessage()"
+        [type]="toastType()"
+        [duration]="3000"
+        [positionAnchor]="navbarAnchorId"
+      ></app-toast>
+      <app-toast [(isOpen)]="toastOpenBare" [message]="toastMessage()" [type]="toastType()" [duration]="3000"></app-toast>
+    </section>
+
+    <!-- EmptyState -->
+    <section class="kit-section">
+      <h2>EmptyState</h2>
+      <app-card padding="none">
+        <app-empty-state title="Sin resultados" description="No encontramos apuntes para tu búsqueda.">
+          <span slot="action">
+            <app-button size="sm">Explorar todo</app-button>
+          </span>
+        </app-empty-state>
+      </app-card>
+    </section>
+
+    <!-- RatingStars -->
+    <section class="kit-section">
+      <h2>RatingStars</h2>
+      <p class="kit-section__hint">rating=3.5 → 3 llenas, 1 media, 1 vacía</p>
+      <app-rating-stars [rating]="demoRating()" [showCount]="true" [count]="128"></app-rating-stars>
+      <p class="kit-section__hint">Interactivo</p>
+      <app-rating-stars [(rating)]="interactiveRating" [interactive]="true" size="lg"></app-rating-stars>
+    </section>
+
+    <!-- VerifiedBadge -->
+    <section class="kit-section">
+      <h2>VerifiedBadge</h2>
+      <div class="kit-row">
+        <app-verified-badge type="identity"></app-verified-badge>
+        <app-verified-badge type="content"></app-verified-badge>
+      </div>
+    </section>
+
+    <!-- AIDeclarationBadge -->
+    <section class="kit-section">
+      <h2>AIDeclarationBadge</h2>
+      <div class="kit-col">
+        @for (declaration of aiDeclarations; track declaration) {
+          <app-ai-declaration-badge
+            [declaration]="declaration"
+            details="Se utilizó IA para estructurar el resumen; el contenido fue revisado por el autor."
+          ></app-ai-declaration-badge>
+        }
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="kit-section">
+      <h2>Servicios (signals)</h2>
+
+      <h3>CartService</h3>
+      <p>Items: {{ cart.items().length }} — Total: {{ formatCLP(cartEmptyTotal()) }}</p>
+      <div class="kit-row">
+        <app-button size="sm" (click)="addSampleCartItem()">Agregar item de ejemplo</app-button>
+        <app-button size="sm" variant="ghost" (click)="cart.clearCart()">Vaciar carrito</app-button>
+      </div>
+
+      <h3>AuthService</h3>
+      <p>user: {{ auth.user() ? auth.user()?.full_name : 'null' }} — loading: {{ auth.loading() }}</p>
+      <div class="kit-row">
+        <app-button size="sm" (click)="fetchAuthUser()">fetchUser()</app-button>
+        <app-button size="sm" variant="ghost" (click)="auth.signOut()">signOut()</app-button>
+      </div>
+
+      <h3>UiService</h3>
+      <app-input
+        label="Buscar"
+        placeholder="Ej: Cálculo II"
+        [(value)]="searchDraft"
+        (valueChange)="ui.setSearchQuery($event)"
+      ></app-input>
+      <p>searchQuery: "{{ ui.searchQuery() }}" — activeTab: {{ ui.activeTab() }}</p>
+      <div class="kit-row">
+        <app-button size="sm" (click)="ui.setActiveTab('notes')">Tab notes</app-button>
+        <app-button size="sm" (click)="ui.setActiveTab('tutors')">Tab tutors</app-button>
+        <app-button size="sm" variant="ghost" (click)="ui.resetFilters()">Reset filters</app-button>
+      </div>
+    </section>
+  </div>
+</ion-content>
+
+<app-navbar></app-navbar>

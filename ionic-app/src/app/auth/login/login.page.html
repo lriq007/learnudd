@@ -1,0 +1,78 @@
+<ion-content class="login-content">
+  <div class="login-page">
+    @if (success()) {
+      <div class="login-success udd-fade-in">
+        <h1>Revisa tu correo</h1>
+        <p>Enviamos un enlace de verificación a <strong>{{ email() }}</strong></p>
+        <app-button variant="outline" [fullWidth]="true" (click)="useAnotherEmail()">
+          Usar otro correo
+        </app-button>
+      </div>
+    } @else {
+      <div class="login-header">
+        <h1>Learn<span class="login-header__accent">UDD</span></h1>
+        <p>Tu comunidad académica UDD, en un solo lugar</p>
+      </div>
+
+      <app-card class="login-form-card">
+        <div class="login-mode-toggle">
+          <app-button
+            size="sm"
+            [variant]="mode() === 'password' ? 'primary' : 'ghost'"
+            (click)="setMode('password')"
+          >
+            Contraseña
+          </app-button>
+          <app-button size="sm" [variant]="mode() === 'magic' ? 'primary' : 'ghost'" (click)="setMode('magic')">
+            Magia
+          </app-button>
+        </div>
+
+        <!--
+          No <form>/ngSubmit here: app-input's own template already puts
+          [ngModel] on its internal ion-input (per CAP-7), and nesting that
+          inside an outer NgForm throws NG01354 (a child component's ngModel
+          can't register with the parent's NgForm across the component
+          boundary). Enter-to-submit is kept via (keyup.enter) on each field
+          instead — native keyboard events are composed, so they bubble up
+          through app-input's host past its Shadow DOM boundary.
+        -->
+        <div (keyup.enter)="submit()">
+          <app-input
+            label="Correo institucional"
+            type="email"
+            placeholder="nombre@udd.cl"
+            [(value)]="email"
+            [error]="error()"
+            [hint]="mode() === 'password' ? 'Contraseña: test123456' : 'Te enviaremos un enlace mágico'"
+          ></app-input>
+
+          @if (mode() === 'password') {
+            <app-input label="Contraseña" type="password" placeholder="••••••••" [(value)]="password"></app-input>
+          }
+
+          <app-button [fullWidth]="true" [loading]="loading()" (click)="submit()">
+            {{ mode() === 'password' ? 'Iniciar sesión' : 'Continuar con correo UDD' }}
+          </app-button>
+        </div>
+      </app-card>
+
+      <app-card class="login-demo-card">
+        <p class="login-demo-card__hint">Cuentas de prueba (contraseña: test123456)</p>
+        <div class="login-demo-grid">
+          @for (account of demoAccounts; track account.email) {
+            <app-button
+              variant="outline"
+              size="sm"
+              class="login-demo-account"
+              (click)="fillDemoAccount(account)"
+            >
+              <span class="login-demo-account__name">{{ account.name }}</span>
+              <span class="login-demo-account__email">{{ account.email }}</span>
+            </app-button>
+          }
+        </div>
+      </app-card>
+    }
+  </div>
+</ion-content>

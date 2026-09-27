@@ -1,0 +1,109 @@
+<ion-content class="onboarding-content">
+  <div class="onboarding-progress">
+    <div class="onboarding-progress__bar" [style.width.%]="progress()"></div>
+  </div>
+  <div class="onboarding-progress__label">
+    <span>Paso {{ step() }} de {{ totalSteps }}</span>
+    <span>{{ step() === 1 ? 'Tu carrera' : step() === 2 ? 'Tu semestre' : 'Tus intereses' }}</span>
+  </div>
+
+  <div class="onboarding-page">
+    @if (step() === 1) {
+      <div class="onboarding-step udd-fade-in">
+        <div class="onboarding-step__header">
+          <h2>Cuéntanos sobre ti</h2>
+          <p>Selecciona tu campus y carrera para personalizar tu experiencia</p>
+        </div>
+
+        <div class="onboarding-field">
+          <label>Campus</label>
+          <div class="onboarding-options-grid">
+            @for (c of campusOptions; track c) {
+              <app-button
+                size="sm"
+                [variant]="campus() === c ? 'primary' : 'outline'"
+                (click)="selectCampus(c)"
+              >
+                {{ c }}
+              </app-button>
+            }
+          </div>
+        </div>
+
+        <div class="onboarding-field">
+          <ion-select
+            label="Carrera"
+            labelPlacement="stacked"
+            placeholder="Selecciona tu carrera"
+            fill="outline"
+            [value]="major()"
+            (ionChange)="selectMajor($event.detail.value)"
+          >
+            @for (m of majorOptions; track m) {
+              <ion-select-option [value]="m">{{ m }}</ion-select-option>
+            }
+          </ion-select>
+        </div>
+      </div>
+    }
+
+    @if (step() === 2) {
+      <div class="onboarding-step udd-fade-in">
+        <div class="onboarding-step__header">
+          <h2>¿En qué semestre estás?</h2>
+          <p>Esto nos ayuda a mostrarte material relevante para tu nivel</p>
+        </div>
+
+        <div class="onboarding-options-list">
+          @for (s of semesterOptions; track s) {
+            <app-button
+              [fullWidth]="true"
+              [variant]="semester() === s.split(' ')[0] ? 'primary' : 'outline'"
+              (click)="selectSemester(s)"
+            >
+              {{ s }}
+            </app-button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (step() === 3) {
+      <div class="onboarding-step udd-fade-in">
+        <div class="onboarding-step__header">
+          <h2>¿Qué ramos te interesan?</h2>
+          <p>Selecciona los ramos para los que quieres material o tutores</p>
+        </div>
+
+        <div class="onboarding-interests">
+          @for (interest of interestOptions; track interest) {
+            <app-button
+              size="sm"
+              [variant]="interests().includes(interest) ? 'primary' : 'outline'"
+              (click)="toggleInterest(interest)"
+            >
+              {{ interest }}
+            </app-button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (error()) {
+      <p class="onboarding-error">{{ error() }}</p>
+    }
+  </div>
+
+  <div class="onboarding-nav udd-safe-bottom">
+    @if (step() > 1) {
+      <app-button variant="outline" (click)="back()">Atrás</app-button>
+    }
+    @if (step() < totalSteps) {
+      <app-button [disabled]="!canProceed()" (click)="next()">Siguiente</app-button>
+    } @else {
+      <app-button [disabled]="!canProceed()" [loading]="loading()" (click)="submit()">
+        Personalizar mi inicio
+      </app-button>
+    }
+  </div>
+</ion-content>

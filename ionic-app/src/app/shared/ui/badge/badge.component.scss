@@ -1,0 +1,52 @@
+.app-badge {
+  --border-radius: var(--udd-radius-full);
+  font-weight: 500; // font-medium
+  text-transform: none;
+  box-shadow: none;
+}
+
+.app-badge--default {
+  --background: rgba(var(--ion-color-medium-rgb), 0.1);
+  --color: var(--ion-color-medium);
+}
+
+.app-badge--primary {
+  --background: rgba(var(--ion-color-primary-rgb), 0.1);
+  --color: var(--ion-color-primary);
+}
+
+.app-badge--success {
+  --background: rgba(var(--ion-color-success-rgb), 0.1);
+  --color: var(--ion-color-success);
+}
+
+.app-badge--warning {
+  --background: rgba(var(--ion-color-warning-rgb), 0.1);
+  --color: var(--ion-color-warning);
+}
+
+.app-badge--error {
+  --background: rgba(var(--ion-color-danger-rgb), 0.1);
+  --color: var(--ion-color-danger);
+}
+
+.app-badge--gold {
+  --background: rgba(var(--ion-color-udd-gold-rgb), 0.1);
+  --color: var(--ion-color-udd-gold);
+}
+
+.app-badge--sm {
+  --padding-start: 8px; // px-2
+  --padding-end: 8px;
+  --padding-top: 2px; // py-0.5
+  --padding-bottom: 2px;
+  font-size: 0.75rem; // text-xs
+}
+
+.app-badge--md {
+  --padding-start: 12px; // px-3
+  --padding-end: 12px;
+  --padding-top: 4px; // py-1
+  --padding-bottom: 4px;
+  font-size: 0.875rem; // text-sm
+}

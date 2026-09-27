@@ -1,0 +1,38 @@
+<nav class="app-navbar udd-safe-bottom" id="app-navbar-el">
+  <ion-tab-bar class="app-navbar__bar">
+    @for (item of navItems.slice(0, 2); track item.href) {
+      <ion-tab-button
+        [routerLink]="item.href"
+        [selected]="isActive(item.href)"
+        class="app-navbar__button"
+        [class.app-navbar__button--active]="isActive(item.href)"
+      >
+        <ion-icon [icon]="item.icon"></ion-icon>
+        <ion-label>{{ item.label }}</ion-label>
+      </ion-tab-button>
+    }
+
+    <div class="app-navbar__spacer" aria-hidden="true"></div>
+
+    @for (item of navItems.slice(2); track item.href) {
+      <ion-tab-button
+        [routerLink]="item.href"
+        [selected]="isActive(item.href)"
+        class="app-navbar__button"
+        [class.app-navbar__button--active]="isActive(item.href)"
+      >
+        <ion-icon [icon]="item.icon"></ion-icon>
+        <ion-label>{{ item.label }}</ion-label>
+      </ion-tab-button>
+    }
+  </ion-tab-bar>
+
+  <a class="app-navbar__center" [routerLink]="publishHref">
+    <span class="app-navbar__center-inner">
+      <span class="app-navbar__center-circle">
+        <ion-icon [icon]="addIcon"></ion-icon>
+      </span>
+      <span class="app-navbar__center-label">Publicar</span>
+    </span>
+  </a>
+</nav>

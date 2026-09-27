@@ -1,0 +1,14 @@
+@if (visible()) {
+  <div class="app-ai-declaration">
+    <ion-icon [icon]="icon" class="app-ai-declaration__icon"></ion-icon>
+    <div class="app-ai-declaration__body">
+      <div class="app-ai-declaration__header">
+        <span class="app-ai-declaration__label">{{ label() }}</span>
+        <app-badge [variant]="badgeVariant()" size="sm">{{ badgeLabel() }}</app-badge>
+      </div>
+      @if (details()) {
+        <p class="app-ai-declaration__details">{{ details() }}</p>
+      }
+    </div>
+  </div>
+}

@@ -1,0 +1,14 @@
+<ion-button
+  [fill]="fill()"
+  [color]="color()"
+  [expand]="expand()"
+  [disabled]="isDisabled()"
+  [type]="type()"
+  class="app-button"
+  [class]="'app-button--' + variant() + ' app-button--' + size()"
+>
+  @if (loading()) {
+    <ion-spinner name="crescent" class="app-button__spinner"></ion-spinner>
+  }
+  <ng-content></ng-content>
+</ion-button>

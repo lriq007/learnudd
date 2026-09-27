@@ -1,0 +1,38 @@
+.app-card {
+  --border-radius: var(--udd-radius-xl); // rounded-2xl (16px)
+  --background: #ffffff;
+  margin: 0;
+  border-style: solid;
+  border-width: 0;
+  border-color: transparent;
+}
+
+.app-card--default {
+  --box-shadow: var(--udd-shadow-sm);
+}
+
+.app-card--elevated {
+  --box-shadow: var(--udd-shadow-md);
+}
+
+.app-card--outlined {
+  --box-shadow: none;
+  border-width: 1px;
+  border-color: var(--udd-border-color);
+}
+
+.app-card--pad-none {
+  padding: 0;
+}
+
+.app-card--pad-sm {
+  padding: 12px; // p-3
+}
+
+.app-card--pad-md {
+  padding: 16px; // p-4
+}
+
+.app-card--pad-lg {
+  padding: 24px; // p-6
+}

@@ -1,0 +1,98 @@
+$bar-height: 64px; // h-16
+
+.app-navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: #ffffff;
+  border-top: 1px solid var(--udd-border-color);
+}
+
+.app-navbar__bar {
+  --background: #ffffff;
+  --border: none;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  height: $bar-height;
+}
+
+.app-navbar__spacer {
+  flex: 1; // matches ion-tab-button's own flex:1, reserves the middle slot
+  min-width: 56px;
+}
+
+.app-navbar__button {
+  --color: var(--udd-gray);
+  --color-selected: var(--ion-color-primary);
+
+  ion-icon {
+    font-size: 22px;
+  }
+
+  ion-label {
+    font-size: 10px;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+}
+
+.app-navbar__button--active ion-icon {
+  font-weight: 600;
+}
+
+// The elevated center button: a sibling OVERLAY (not an ion-tab-bar child —
+// see navbar.component.ts header comment for why) that reproduces the
+// original's own math exactly: a box the same height as the bar
+// (cross-axis-centers a single child, exactly like the original's h-16 row
+// centered the Link) with that child then shifted up via -mt-4 (-16px).
+.app-navbar__center {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  height: $bar-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  z-index: 41;
+}
+
+.app-navbar__center-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: -16px; // -mt-4
+}
+
+.app-navbar__center-circle {
+  width: 56px; // w-14
+  height: 56px; // h-14
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ion-color-primary);
+  color: #ffffff;
+  box-shadow: var(--udd-shadow-lg);
+  transition: background-color var(--udd-duration-fast) ease;
+
+  ion-icon {
+    font-size: 24px;
+  }
+}
+
+.app-navbar__center:hover .app-navbar__center-circle {
+  background: var(--ion-color-primary-shade);
+}
+
+.app-navbar__center-label {
+  font-size: 10px; // text-[10px]
+  margin-top: 4px; // mt-1
+  color: var(--udd-gray);
+  font-weight: 500;
+}

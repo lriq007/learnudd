@@ -1,0 +1,99 @@
+.login-content {
+  --background: var(--ion-background-color);
+}
+
+.login-page {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 64px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  justify-content: center;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  h1 {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: var(--udd-deep);
+    margin: 0 0 4px;
+  }
+
+  p {
+    color: var(--udd-gray);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+.login-header__accent {
+  color: var(--udd-blue);
+}
+
+.login-form-card {
+  margin-bottom: 24px;
+}
+
+.login-mode-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.login-demo-card {
+  margin-bottom: 24px;
+}
+
+.login-demo-card__hint {
+  font-size: 0.75rem;
+  color: var(--udd-gray);
+  text-align: center;
+  margin: 0 0 12px;
+}
+
+.login-demo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.login-demo-account {
+  display: block;
+
+  ::ng-deep .app-button {
+    text-align: left;
+  }
+}
+
+.login-demo-account__name {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.login-demo-account__email {
+  display: block;
+  font-size: 0.625rem;
+  opacity: 0.7;
+}
+
+.login-success {
+  text-align: center;
+  padding-top: 96px;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--udd-graphite);
+    margin: 0 0 8px;
+  }
+
+  p {
+    color: var(--udd-gray);
+    margin: 0 0 32px;
+  }
+}

@@ -1,0 +1,147 @@
+// UDD theme — derived from src/app/globals.css (Next.js MVP tokens).
+// Native Ionic theming: --ion-color-* palette + shape/shadow/timing variables.
+// See CAP-7 spec (_bmad-output/implementation-artifacts/spec-cap-7-ui-kit-stores.md)
+// Design Notes for the 4 points flagged as visual-parity risk (Navbar center
+// button, Toast, Skeleton shimmer, Card radius/shadow) — implemented here with
+// best-effort parity; flagged for Lucas's visual confirmation.
+
+/** Ionic CSS Variables **/
+
+:root {
+  /* --- primary → udd-blue #005293 (MVP "brand" primary action color) --- */
+  --ion-color-primary: #005293;
+  --ion-color-primary-rgb: 0, 82, 147;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #004a84;
+  --ion-color-primary-tint: #1a639e;
+
+  /* --- secondary → udd-deep #062B4F --- */
+  --ion-color-secondary: #062b4f;
+  --ion-color-secondary-rgb: 6, 43, 79;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #052747;
+  --ion-color-secondary-tint: #1f4061;
+
+  /* --- tertiary → udd-sky #008DD2 --- */
+  --ion-color-tertiary: #008dd2;
+  --ion-color-tertiary-rgb: 0, 141, 210;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #007fbd;
+  --ion-color-tertiary-tint: #1a98d7;
+
+  /* --- success #10B981 (same hex as MVP --color-success) --- */
+  --ion-color-success: #10b981;
+  --ion-color-success-rgb: 16, 185, 129;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #0ea774;
+  --ion-color-success-tint: #28c08e;
+
+  /* --- warning #F59E0B (same hex as MVP --color-warning) --- */
+  --ion-color-warning: #f59e0b;
+  --ion-color-warning-rgb: 245, 158, 11;
+  --ion-color-warning-contrast: #ffffff;
+  --ion-color-warning-contrast-rgb: 255, 255, 255;
+  --ion-color-warning-shade: #dd8e0a;
+  --ion-color-warning-tint: #f6a823;
+
+  /* --- danger → MVP "error" token #EF4444 (Ionic has no "error" name) --- */
+  --ion-color-danger: #ef4444;
+  --ion-color-danger-rgb: 239, 68, 68;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #d73d3d;
+  --ion-color-danger-tint: #f15757;
+
+  /* --- dark → udd-graphite #171C24 (MVP text-primary) --- */
+  --ion-color-dark: #171c24;
+  --ion-color-dark-rgb: 23, 28, 36;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #151920;
+  --ion-color-dark-tint: #2e333a;
+
+  /* --- medium → udd-gray #64748B (MVP text-secondary) --- */
+  --ion-color-medium: #64748b;
+  --ion-color-medium-rgb: 100, 116, 139;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #5a687d;
+  --ion-color-medium-tint: #748297;
+
+  /* --- light → udd-ivory #FAF8F3 (MVP page background/surface) --- */
+  --ion-color-light: #faf8f3;
+  --ion-color-light-rgb: 250, 248, 243;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #e1dfdb;
+  --ion-color-light-tint: #fbf9f4;
+
+  /* --- custom: udd-gold #C89B3C (rating stars / "gold" badge variant) --- */
+  --ion-color-udd-gold: #c89b3c;
+  --ion-color-udd-gold-rgb: 200, 155, 60;
+  --ion-color-udd-gold-contrast: #ffffff;
+  --ion-color-udd-gold-contrast-rgb: 255, 255, 255;
+  --ion-color-udd-gold-shade: #b48c36;
+  --ion-color-udd-gold-tint: #cea550;
+
+  /* --- custom: info #3B82F6 (MVP --color-info, unused by ported components
+       today but kept for parity with globals.css) --- */
+  --ion-color-udd-info: #3b82f6;
+  --ion-color-udd-info-rgb: 59, 130, 246;
+  --ion-color-udd-info-contrast: #ffffff;
+  --ion-color-udd-info-contrast-rgb: 255, 255, 255;
+  --ion-color-udd-info-shade: #3575dd;
+  --ion-color-udd-info-tint: #4f8ff7;
+
+  /* App background / text — matches globals.css :root (--background/--foreground) */
+  --ion-background-color: #faf8f3;
+  --ion-background-color-rgb: 250, 248, 243;
+  --ion-text-color: #171c24;
+  --ion-text-color-rgb: 23, 28, 36;
+
+  --ion-toolbar-background: rgba(255, 255, 255, 0.8);
+  --ion-item-background: #ffffff;
+  --ion-card-background: #ffffff;
+
+  /* Non-Ionic-native custom tokens, kept 1:1 with globals.css for component
+     styles that Ionic doesn't expose a semantic variable for. */
+  --udd-border-color: #e2e8f0;
+  --udd-graphite: #171c24;
+  --udd-gray: #64748b;
+  --udd-blue: #005293;
+  --udd-deep: #062b4f;
+  --udd-sky: #008dd2;
+  --udd-gold: #c89b3c;
+
+  /* Shape (Tailwind radius scale used by the MVP: rounded-xl=12px, rounded-2xl=16px, rounded-full=pill) */
+  --udd-radius-md: 8px; /* Skeleton: .skeleton { border-radius: 8px } */
+  --udd-radius-lg: 12px; /* rounded-xl: Button, Input, Toast */
+  --udd-radius-xl: 16px; /* rounded-2xl: Card */
+  --udd-radius-full: 9999px; /* rounded-full: Badge, VerifiedBadge, Navbar center button */
+
+  /* Shadows (Tailwind defaults used by the MVP) */
+  --udd-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --udd-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --udd-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Timing (matches globals.css keyframes/transitions) */
+  --udd-duration-fast: 200ms; /* btn-press / hover transitions */
+  --udd-duration-fade: 0.3s; /* fade-in */
+  --udd-duration-shimmer: 1.5s; /* skeleton shimmer */
+
+  --ion-font-family: 'Manrope', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/*
+ * The MVP has no dark-mode variant (Next.js app is a single fixed light
+ * theme). Ionic's blank starter imports `dark.system.css`, which would make
+ * `/kit` (and later domain screens) shift color on OS dark-mode devices —
+ * a look-and-feel change the current app never has. Decision (documented,
+ * not silent): the dark-mode import was removed from src/global.scss so the
+ * theme stays visually identical regardless of system color scheme, matching
+ * today's behavior. Revisit if/when the product actually wants dark mode.
+ */

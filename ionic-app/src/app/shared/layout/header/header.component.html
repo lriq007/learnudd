@@ -1,0 +1,36 @@
+<ion-header class="app-header" [translucent]="true">
+  <ion-toolbar class="app-header__toolbar">
+    <div class="app-header__row">
+      <div class="app-header__left">
+        @if (showBack()) {
+          <button type="button" class="app-header__icon-btn" (click)="goBack()" aria-label="Volver">
+            <ion-icon [icon]="arrowBackIcon"></ion-icon>
+          </button>
+        }
+        @if (title()) {
+          <h1 class="app-header__title">{{ title() }}</h1>
+        } @else if (showSearch()) {
+          <button type="button" class="app-header__search" (click)="searchClick.emit()">
+            <ion-icon [icon]="searchIcon"></ion-icon>
+            <span>Buscar...</span>
+          </button>
+        }
+      </div>
+
+      <div class="app-header__right">
+        <ng-content select="[slot=right-action]"></ng-content>
+        @if (showNotifications()) {
+          <a class="app-header__icon-btn app-header__icon-btn--relative" routerLink="/messages" aria-label="Notificaciones">
+            <ion-icon [icon]="notificationsIcon"></ion-icon>
+            <span class="app-header__dot"></span>
+          </a>
+        }
+        @if (showCart()) {
+          <a class="app-header__icon-btn" routerLink="/library" aria-label="Biblioteca">
+            <ion-icon [icon]="cartIcon"></ion-icon>
+          </a>
+        }
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>

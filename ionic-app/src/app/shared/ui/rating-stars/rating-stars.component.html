@@ -1,0 +1,22 @@
+<div class="app-rating-stars">
+  <div class="app-rating-stars__stars">
+    @for (s of stars(); track s.index) {
+      <button
+        type="button"
+        class="app-rating-stars__star"
+        [class.app-rating-stars__star--interactive]="interactive()"
+        [class.app-rating-stars__star--filled]="s.filled"
+        [disabled]="!interactive()"
+        (click)="onStarClick(s.index)"
+      >
+        <ion-icon [icon]="s.icon" [style.font-size.px]="iconPx()"></ion-icon>
+      </button>
+    }
+  </div>
+  @if (showValue()) {
+    <span class="app-rating-stars__value app-rating-stars__value--{{ size() }}">{{ rating().toFixed(1) }}</span>
+  }
+  @if (showCount() && count() !== undefined) {
+    <span class="app-rating-stars__count app-rating-stars__value--{{ size() }}">({{ count() }})</span>
+  }
+</div>
