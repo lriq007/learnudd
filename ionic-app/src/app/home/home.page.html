@@ -1,0 +1,113 @@
+<app-header></app-header>
+
+<ion-content class="home-content">
+  <div class="home-page">
+    <section class="home-welcome">
+      <h1 class="home-welcome__title">{{ greeting() }}, {{ firstName() }}</h1>
+      <p class="home-welcome__subtitle">¿Qué necesitas para tus ramos hoy?</p>
+
+      <a routerLink="/explore" class="home-search">
+        <ion-icon [icon]="searchIcon"></ion-icon>
+        <span>Busca un ramo, apunte o tutor</span>
+      </a>
+    </section>
+
+    <section class="home-quick-actions">
+      <a [routerLink]="['/explore']" [queryParams]="{ tab: 'notes' }" class="home-quick-actions__item">
+        <app-card class="home-quick-actions__card">
+          <div class="home-quick-actions__icon home-quick-actions__icon--notes">
+            <ion-icon [icon]="bookIcon"></ion-icon>
+          </div>
+          <div>
+            <p class="home-quick-actions__title">Apuntes</p>
+            <p class="home-quick-actions__hint">Material verificado</p>
+          </div>
+        </app-card>
+      </a>
+      <a [routerLink]="['/explore']" [queryParams]="{ tab: 'tutors' }" class="home-quick-actions__item">
+        <app-card class="home-quick-actions__card">
+          <div class="home-quick-actions__icon home-quick-actions__icon--tutors">
+            <ion-icon [icon]="peopleIcon"></ion-icon>
+          </div>
+          <div>
+            <p class="home-quick-actions__title">Clases</p>
+            <p class="home-quick-actions__hint">Tutores UDD</p>
+          </div>
+        </app-card>
+      </a>
+    </section>
+
+    <section class="home-section">
+      <div class="home-section__header">
+        <div class="home-section__heading">
+          <ion-icon [icon]="trendingUpIcon"></ion-icon>
+          <h2>Para tus ramos</h2>
+        </div>
+        <a routerLink="/explore" class="home-section__link">Ver todo</a>
+      </div>
+
+      @if (loading()) {
+        <div class="home-section__list">
+          @for (i of skeletonRows; track i) {
+            <app-skeleton height="6rem"></app-skeleton>
+          }
+        </div>
+      } @else {
+        <div class="home-section__list">
+          @for (note of courseNotes(); track note.id) {
+            <app-note-card [note]="note"></app-note-card>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="home-section">
+      <div class="home-section__header">
+        <div class="home-section__heading">
+          <ion-icon [icon]="starIcon"></ion-icon>
+          <h2>Mejor evaluados</h2>
+        </div>
+      </div>
+
+      @if (loading()) {
+        <div class="home-section__scroll">
+          @for (i of compactSkeletonRows; track i) {
+            <app-skeleton width="160px" height="160px"></app-skeleton>
+          }
+        </div>
+      } @else {
+        <div class="home-section__scroll">
+          @for (note of topRatedNotes(); track note.id) {
+            <app-note-card [note]="note" variant="compact"></app-note-card>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="home-section">
+      <div class="home-section__header">
+        <div class="home-section__heading">
+          <ion-icon [icon]="timeIcon"></ion-icon>
+          <h2>Tutores disponibles esta semana</h2>
+        </div>
+        <a [routerLink]="['/explore']" [queryParams]="{ tab: 'tutors' }" class="home-section__link">Ver todos</a>
+      </div>
+
+      @if (loading()) {
+        <div class="home-section__list">
+          @for (i of tutorSkeletonRows; track i) {
+            <app-skeleton height="7rem"></app-skeleton>
+          }
+        </div>
+      } @else {
+        <div class="home-section__list">
+          @for (tutor of tutors(); track tutor.id) {
+            <app-tutor-card [tutor]="tutor" [subtitle]="tutorSubtitle(tutor)"></app-tutor-card>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</ion-content>
+
+<app-navbar></app-navbar>

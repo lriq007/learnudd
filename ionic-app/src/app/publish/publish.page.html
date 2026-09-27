@@ -1,0 +1,40 @@
+<app-header title="Publicar"></app-header>
+
+<ion-content class="publish-content">
+  <div class="publish-page">
+    <div class="publish-intro">
+      <h2>¿Qué quieres compartir?</h2>
+      <p>Elige qué tipo de contenido quieres publicar</p>
+    </div>
+
+    <div class="publish-options">
+      <a routerLink="/publish/note" class="publish-option">
+        <app-card>
+          <div class="publish-option__row">
+            <div class="publish-option__icon publish-option__icon--note">
+              <ion-icon [icon]="bookIcon"></ion-icon>
+            </div>
+            <div class="publish-option__body">
+              <h3>Publicar apunte</h3>
+              <p>Comparte tus apuntes, resúmenes o guías de estudio</p>
+            </div>
+          </div>
+        </app-card>
+      </a>
+
+      <a routerLink="/publish/tutor" class="publish-option">
+        <app-card>
+          <div class="publish-option__row">
+            <div class="publish-option__icon publish-option__icon--tutor">
+              <ion-icon [icon]="peopleIcon"></ion-icon>
+            </div>
+            <div class="publish-option__body">
+              <h3>Ofrecer clases</h3>
+              <p>Da clases particulares y ayuda a otros estudiantes</p>
+            </div>
+          </div>
+        </app-card>
+      </a>
+    </div>
+  </div>
+</ion-content>

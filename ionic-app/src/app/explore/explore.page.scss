@@ -1,0 +1,59 @@
+.explore-content {
+  --background: var(--ion-background-color);
+}
+
+.explore-page {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 12px 16px 96px; // clear the fixed Navbar + safe-bottom
+}
+
+.explore-tabs {
+  display: flex;
+  gap: 8px;
+  background: #ffffff;
+  border-radius: var(--udd-radius-lg);
+  border: 1px solid var(--udd-border-color);
+  padding: 4px;
+  margin-bottom: 12px;
+}
+
+.explore-search-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.explore-search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.explore-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.explore-filter-field__label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--udd-gray);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.explore-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.explore-results__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}

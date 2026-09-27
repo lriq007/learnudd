@@ -1,0 +1,98 @@
+<app-header title="Explorar"></app-header>
+
+<ion-content class="explore-content">
+  <div class="explore-page">
+    <div class="explore-tabs">
+      <app-button [fullWidth]="true" size="sm" [variant]="activeTab() === 'notes' ? 'primary' : 'ghost'" (click)="setTab('notes')">
+        <ion-icon [icon]="bookIcon"></ion-icon>
+        Apuntes
+      </app-button>
+      <app-button [fullWidth]="true" size="sm" [variant]="activeTab() === 'tutors' ? 'primary' : 'ghost'" (click)="setTab('tutors')">
+        <ion-icon [icon]="peopleIcon"></ion-icon>
+        Clases
+      </app-button>
+    </div>
+
+    <div class="explore-search-row">
+      <div class="explore-search">
+        <app-input
+          [placeholder]="activeTab() === 'notes' ? 'Buscar apuntes...' : 'Buscar tutores...'"
+          [(value)]="searchQuery"
+          (valueChange)="onSearchChange()"
+        ></app-input>
+        @if (searchQuery()) {
+          <app-button size="sm" variant="ghost" (click)="clearSearch()">
+            <ion-icon [icon]="closeIcon"></ion-icon>
+          </app-button>
+        }
+      </div>
+      <app-button size="sm" [variant]="showFilters() ? 'primary' : 'outline'" (click)="toggleFilters()">
+        <ion-icon [icon]="filterIcon"></ion-icon>
+      </app-button>
+    </div>
+
+    @if (showFilters()) {
+      <div class="explore-filters udd-fade-in">
+        @if (activeTab() === 'notes') {
+          <div class="explore-filter-field">
+            <ion-select
+              label="Carrera"
+              labelPlacement="stacked"
+              placeholder="Todas"
+              fill="outline"
+              [value]="major()"
+              (ionChange)="setMajor($event.detail.value)"
+            >
+              <ion-select-option value="">Todas</ion-select-option>
+              @for (m of majorOptions; track m) {
+                <ion-select-option [value]="m">{{ m }}</ion-select-option>
+              }
+            </ion-select>
+          </div>
+          <div class="explore-filter-field">
+            <label class="explore-filter-field__label">Tipo de material</label>
+            <div class="explore-chip-row">
+              @for (entry of materialTypeEntries; track entry[0]) {
+                <app-button size="sm" [variant]="materialType() === entry[0] ? 'primary' : 'outline'" (click)="toggleMaterialType(entry[0])">
+                  {{ entry[1] }}
+                </app-button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="explore-results">
+      @if (loading()) {
+        <div class="explore-results__list">
+          @for (i of skeletonRows; track i) {
+            <app-skeleton height="7rem"></app-skeleton>
+          }
+        </div>
+      } @else if (activeTab() === 'notes') {
+        @if (notes().length > 0) {
+          <div class="explore-results__list">
+            @for (note of notes(); track note.id) {
+              <app-note-card [note]="note" [showMaterialBadge]="true"></app-note-card>
+            }
+          </div>
+        } @else {
+          <app-empty-state title="No se encontraron apuntes" description="Intenta con otros filtros o busca un ramo diferente"></app-empty-state>
+        }
+      } @else {
+        @if (tutors().length > 0) {
+          <div class="explore-results__list">
+            @for (tutor of tutors(); track tutor.id) {
+              <app-tutor-card [tutor]="tutor" [subtitle]="tutorSubtitle(tutor)" [showModalities]="true"></app-tutor-card>
+            }
+          </div>
+        } @else {
+          <app-empty-state title="No se encontraron tutores" description="Intenta con otros filtros o busca un ramo diferente"></app-empty-state>
+        }
+      }
+    </div>
+  </div>
+</ion-content>
+
+<app-navbar></app-navbar>
