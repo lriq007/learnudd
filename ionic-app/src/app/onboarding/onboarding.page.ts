@@ -4,29 +4,17 @@ import { IonContent, IonSelect, IonSelectOption } from '@ionic/angular';
 
 import { ButtonComponent } from '../shared/ui/button/button.component';
 import { AuthService } from '../shared/state/auth.service';
-import { MAJOR_OPTIONS } from '../shared/models';
+import { MAJOR_OPTIONS, SEMESTER_OPTIONS } from '../shared/models';
 
 // Ported from src/app/(protected)/onboarding/page.tsx. Per Code Map:
-// CAMPUS_OPTIONS/SEMESTER_OPTIONS are ported from src/types/index.ts
-// (líneas 189-222); INTERESTS is ported from the page's own local array.
-// Neither of those 2 sets is shared with any other ionic-app page yet, so
-// both stay here (not in shared/models.ts). MAJOR_OPTIONS moved to
-// shared/models.ts in CAP-2 (Boundaries) now that explore.page.ts is a
-// second consumer — imported from there instead of redeclared locally.
+// CAMPUS_OPTIONS is ported from src/types/index.ts (líneas 189-222);
+// INTERESTS is ported from the page's own local array. Neither of those 2
+// sets is shared with any other ionic-app page yet, so both stay here (not
+// in shared/models.ts). MAJOR_OPTIONS moved to shared/models.ts in CAP-2
+// (Boundaries) now that explore.page.ts is a second consumer — imported from
+// there instead of redeclared locally. CAP-3: SEMESTER_OPTIONS moved there
+// too, now that publish-note.page.ts is a second consumer of it as well.
 const CAMPUS_OPTIONS = ['Santiago', 'Vitacura', 'Concepción', 'Valparaíso'] as const;
-
-const SEMESTER_OPTIONS = [
-  '1° Semestre',
-  '2° Semestre',
-  '3° Semestre',
-  '4° Semestre',
-  '5° Semestre',
-  '6° Semestre',
-  '7° Semestre',
-  '8° Semestre',
-  '9° Semestre',
-  '10° Semestre',
-] as const;
 
 const INTERESTS = [
   'Cálculo II',

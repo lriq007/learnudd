@@ -1,11 +1,27 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import type { LibraryItem, Note, NoteRating } from '../models';
+import type { AIDeclaration, LibraryItem, Note, NoteRating } from '../models';
 
 export interface NotesSearchParams {
   query: string;
   major: string;
   materialType: string;
+}
+
+// CAP-3: ported from src/app/(protected)/publish/note/page.tsx's formData
+// shape (líneas 23-34), minus author_id (passed as create()'s own arg, same
+// split as purchase()'s userId/note args).
+export interface CreateNoteInput {
+  title: string;
+  description: string;
+  major: string;
+  course: string;
+  semester: string;
+  material_type: string;
+  price: number;
+  pages: number;
+  ai_declaration: AIDeclaration;
+  ai_details: string;
 }
 
 // CAP-2: queries ported from src/app/(protected)/page.tsx (fetchHome, líneas
@@ -121,6 +137,37 @@ export class NotesService {
       .update({ downloads: (note.downloads || 0) + 1 })
       .eq('id', note.id);
 
+    return { error: null };
+  }
+
+  // CAP-3: ported from src/app/(protected)/publish/note/page.tsx
+  // (handleSubmit, líneas 54-82). Per Boundaries: no file upload to Supabase
+  // Storage — file_url/cover_url are never set, same as the MVP, which
+  // never sets them either. Per the {error} mutation pattern established by
+  // purchase(): a null client and a Supabase insert error both resolve to
+  // the same generic "Error al publicar" message the MVP always shows
+  // (i.e. the actual Supabase error message is never surfaced), no
+  // try/catch beyond that (Never: no added network error handling).
+  async create(authorId: string, data: CreateNoteInput): Promise<{ error: string | null }> {
+    const client = this.supabaseService.client;
+    if (!client) return { error: 'Error al publicar' };
+
+    const { error } = await client.from('notes').insert({
+      author_id: authorId,
+      title: data.title,
+      description: data.description || null,
+      major: data.major,
+      course: data.course,
+      semester: data.semester || null,
+      material_type: data.material_type,
+      price: data.price,
+      pages: data.pages || null,
+      ai_declaration: data.ai_declaration,
+      ai_details: data.ai_details || null,
+      status: 'review',
+    });
+
+    if (error) return { error: 'Error al publicar' };
     return { error: null };
   }
 }

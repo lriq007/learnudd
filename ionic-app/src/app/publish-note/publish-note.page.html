@@ -1,0 +1,168 @@
+<ion-content class="publish-note-content">
+  <div class="publish-note-progress">
+    <div class="publish-note-progress__bar" [style.width.%]="progress()"></div>
+  </div>
+  <div class="publish-note-progress__label">
+    <span>Paso {{ step() }} de {{ totalSteps }}</span>
+    <span>{{ stepLabel() }}</span>
+  </div>
+
+  <div class="publish-note-page">
+    @if (step() === 1) {
+      <div class="publish-note-step udd-fade-in">
+        <h2 class="publish-note-step__title">Datos del apunte</h2>
+        <app-input label="Título" placeholder="Ej: Resumen completo Certamen 1" [(value)]="title"></app-input>
+        <div class="publish-note-field">
+          <label>Descripción</label>
+          <ion-textarea
+            placeholder="Describe el contenido de tu apunte..."
+            fill="outline"
+            [rows]="3"
+            [value]="description()"
+            (ionInput)="setDescription($event.detail.value)"
+          ></ion-textarea>
+        </div>
+        <app-input label="Ramo" placeholder="Ej: Cálculo II" [(value)]="course"></app-input>
+        <app-input label="Número de páginas" type="number" placeholder="Ej: 25" [(value)]="pagesInput"></app-input>
+      </div>
+    }
+
+    @if (step() === 2) {
+      <div class="publish-note-step udd-fade-in">
+        <h2 class="publish-note-step__title">Categoría</h2>
+        <div class="publish-note-field">
+          <ion-select
+            label="Carrera"
+            labelPlacement="stacked"
+            placeholder="Selecciona"
+            fill="outline"
+            [value]="major()"
+            (ionChange)="setMajor($event.detail.value)"
+          >
+            @for (m of majorOptions; track m) {
+              <ion-select-option [value]="m">{{ m }}</ion-select-option>
+            }
+          </ion-select>
+        </div>
+        <div class="publish-note-field">
+          <ion-select
+            label="Semestre"
+            labelPlacement="stacked"
+            placeholder="Opcional"
+            fill="outline"
+            [value]="semester()"
+            (ionChange)="setSemester($event.detail.value)"
+          >
+            @for (s of semesterOptions; track s) {
+              <ion-select-option [value]="s">{{ s }}</ion-select-option>
+            }
+          </ion-select>
+        </div>
+        <div class="publish-note-field">
+          <label>Tipo de material</label>
+          <div class="publish-note-material-grid">
+            @for (opt of materialTypeOptions; track opt.value) {
+              <app-button
+                size="sm"
+                [variant]="materialType() === opt.value ? 'primary' : 'outline'"
+                (click)="selectMaterialType(opt.value)"
+              >
+                {{ opt.label }}
+              </app-button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (step() === 3) {
+      <div class="publish-note-step udd-fade-in">
+        <h2 class="publish-note-step__title">Precio</h2>
+        <app-card>
+          <label class="publish-note-price-label">Precio en CLP</label>
+          <ion-input
+            type="number"
+            min="0"
+            step="100"
+            fill="outline"
+            class="publish-note-price-input"
+            [value]="price()"
+            (ionInput)="setPrice($event.detail.value)"
+          ></ion-input>
+          <p class="publish-note-hint">Deja en 0 para ofrecer gratis</p>
+          <div class="publish-note-quick-prices">
+            @for (p of quickPrices; track p) {
+              <app-button size="sm" [variant]="price() === p ? 'primary' : 'outline'" [fullWidth]="true" (click)="setPrice(p)">
+                {{ formatPrice(p) }}
+              </app-button>
+            }
+          </div>
+        </app-card>
+      </div>
+    }
+
+    @if (step() === 4) {
+      <div class="publish-note-step udd-fade-in">
+        <h2 class="publish-note-step__title">Declaración de IA</h2>
+        <app-card padding="sm">
+          <div class="publish-note-ai-intro">
+            <ion-icon [icon]="aiIcon"></ion-icon>
+            <p>
+              Declara si utilizaste inteligencia artificial para crear este material.
+              Esto es transparente con tus compradores.
+            </p>
+          </div>
+        </app-card>
+
+        <div class="publish-note-ai-options">
+          @for (opt of aiDeclarationOptions; track opt.value) {
+            <button
+              type="button"
+              class="publish-note-ai-option"
+              [class.publish-note-ai-option--active]="aiDeclaration() === opt.value"
+              (click)="selectAiDeclaration(opt.value)"
+            >
+              <div class="publish-note-ai-option__row">
+                <span class="publish-note-ai-option__radio"></span>
+                <span class="publish-note-ai-option__label">{{ opt.label }}</span>
+              </div>
+              <p class="publish-note-ai-option__desc">{{ opt.desc }}</p>
+            </button>
+          }
+        </div>
+
+        <app-card padding="sm">
+          <h3 class="publish-note-summary-title">Resumen</h3>
+          <div class="publish-note-summary-row">
+            <span>Título</span>
+            <span>{{ title() }}</span>
+          </div>
+          <div class="publish-note-summary-row">
+            <span>Ramo</span>
+            <span>{{ course() }}</span>
+          </div>
+          <div class="publish-note-summary-row">
+            <span>Precio</span>
+            <span>{{ priceLabel() }}</span>
+          </div>
+        </app-card>
+      </div>
+    }
+  </div>
+
+  <div class="publish-note-nav udd-safe-bottom">
+    @if (step() > 1) {
+      <app-button variant="outline" (click)="back()">Atrás</app-button>
+    }
+    @if (step() < totalSteps) {
+      <app-button [disabled]="!canProceed()" (click)="next()">Siguiente</app-button>
+    } @else {
+      <app-button [disabled]="!canProceed()" [loading]="loading()" (click)="submit()">
+        <ion-icon [icon]="checkIcon"></ion-icon>
+        Publicar
+      </app-button>
+    }
+  </div>
+</ion-content>
+
+<app-toast [(isOpen)]="toastOpen" [message]="toastMessage()" [type]="toastType()"></app-toast>

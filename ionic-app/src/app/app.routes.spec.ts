@@ -9,6 +9,8 @@ import { NotesService } from './shared/state/notes.service';
 import { FavoritesService } from './shared/state/favorites.service';
 import { NoteDetailPage } from './note-detail/note-detail.page';
 import { LibraryPage } from './library/library.page';
+import { PublishPage } from './publish/publish.page';
+import { PublishNotePage } from './publish-note/publish-note.page';
 
 // Review fix: every other spec provides `provideRouter([])` (an empty route
 // table) or stubs `ActivatedRoute` directly, so nothing previously resolved
@@ -69,6 +71,42 @@ describe('app.routes', () => {
     const harness = await RouterTestingHarness.create();
 
     await harness.navigateByUrl('/explore/notes/n1');
+
+    expect(router.url).toBe('/login');
+  });
+
+  it('usuario autenticado: /publish activa PublishPage', async () => {
+    setup({ id: 'u1', onboarding_completed: true });
+    const harness = await RouterTestingHarness.create();
+
+    const component = await harness.navigateByUrl('/publish');
+
+    expect(component).toBeInstanceOf(PublishPage);
+  });
+
+  it('sin sesión: /publish redirige a /login (protectedGuard)', async () => {
+    const { router } = setup(null);
+    const harness = await RouterTestingHarness.create();
+
+    await harness.navigateByUrl('/publish');
+
+    expect(router.url).toBe('/login');
+  });
+
+  it('usuario autenticado: /publish/note activa PublishNotePage', async () => {
+    setup({ id: 'u1', onboarding_completed: true });
+    const harness = await RouterTestingHarness.create();
+
+    const component = await harness.navigateByUrl('/publish/note');
+
+    expect(component).toBeInstanceOf(PublishNotePage);
+  });
+
+  it('sin sesión: /publish/note redirige a /login (protectedGuard)', async () => {
+    const { router } = setup(null);
+    const harness = await RouterTestingHarness.create();
+
+    await harness.navigateByUrl('/publish/note');
 
     expect(router.url).toBe('/login');
   });

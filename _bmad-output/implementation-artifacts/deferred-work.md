@@ -69,3 +69,27 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-cap-3-notes-marketplace.md`
   summary: El botón "Abrir apunte" de `ionic-app/src/app/library/library.page.html` (ícono de documento junto a cada item) no tiene ningún `(click)` — es un dead button.
   evidence: Hallazgo de review (blind-hunter) sobre CAP-3. Verificado que el MVP (`library/page.tsx` líneas 108-110) tiene el mismo botón sin `onClick`. Paridad fiel — no había ninguna página de "abrir/leer apunte" que portar (no existe en el MVP), así que no hay destino real al que enlazar todavía. Revisar si conviene darle un destino cuando exista un visor de apuntes o al menos redirigir a `/explore/notes/:id` del mismo apunte.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-3-publish-note.md`
+  summary: El wizard de publicar apunte (`publish-note.page.ts`) no valida `title`/`course` con `.trim()` (paso 1), ni pone piso en 0 para `price`/`pages` (permite negativos) — un usuario puede publicar con campos solo-espacios o precios/páginas negativos.
+  evidence: Hallazgo de review (blind-hunter + edge-case-hunter) sobre este spec. Verificado que `publish/note/page.tsx` (MVP) tiene exactamente las mismas 3 faltas de validación (`canProceed` sin trim, `parseInt(...) || 0` sin `Math.max` en ambos campos numéricos). Paridad fiel — el Always de este spec pide "misma validación por paso", que excluye agregar validación que el MVP no tiene. Revisar junto con el resto de validaciones de formularios cuando se decida ir más allá de paridad fiel con el MVP.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-3-publish-note.md`
+  summary: En el wizard de publicar apunte, el botón "Atrás" no se deshabilita mientras `submit()` está en vuelo, y si `NotesService.create()` rechaza (falla de red real, no un `{error}` resuelto) en vez de resolver, `loading()` queda en `true` para siempre sin ningún toast.
+  evidence: Hallazgo de review (edge-case-hunter) sobre este spec. Verificado que `publish/note/page.tsx` (MVP) tampoco deshabilita "Atrás" durante el submit ni tiene try/catch en `handleSubmit`. Mismo patrón ya diferido para CAP-2 (servicios) y CAP-3 (detalle/biblioteca) — el Never de este spec excluye explícitamente agregar manejo de errores de red más allá del MVP. Revisar junto con esos ítems cuando exista Supabase real conectado.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-3-publish-note.md`
+  summary: `PublishNotePage.submit()` no hace nada visible (ni toast ni cambio de estado) si `auth.user()` no tiene id — por ejemplo, sesión expirada a mitad del wizard.
+  evidence: Hallazgo de review (edge-case-hunter) sobre este spec. Verificado que `publish/note/page.tsx` (MVP) tiene el mismo comportamiento (`if (!user) return;`, sin ningún feedback). Paridad fiel, no un gap introducido por este spec.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-3-publish-note.md`
+  summary: Los controles del wizard de publicar apunte (grillas de tipo de material, declaración de IA, precios rápidos, barra de progreso) no tienen `aria-pressed`/`aria-valuenow` — un usuario de screen reader no puede distinguir qué opción está seleccionada.
+  evidence: Hallazgo de review (blind-hunter) sobre este spec. Misma clase de gap de accesibilidad ya diferida para CAP-2 (botones ícono-only sin `aria-label` en Explore) — el MVP tampoco tiene estos atributos. Vale la pena resolverlo en una pasada de accesibilidad dedicada sobre toda la app, no solo este wizard.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-3-publish-note.md`
+  summary: El wizard de publicar apunte no advierte al usuario si navega fuera a mitad de flujo (los 4 pasos de datos ingresados se pierden en silencio).
+  evidence: Hallazgo de review (blind-hunter) sobre este spec. El MVP tampoco tiene esta guarda — sería una feature nueva, no paridad. Revisar si vale la pena agregarla cuando se haga una pasada de UX dedicada sobre formularios largos de la app.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-3-publish-note.md`
+  summary: `ionic-app/angular.json` tiene una clave `"cli.analytics"` con un UUID que no corresponde a ningún spec — quedó en el working tree antes de este spec (generada localmente por el CLI de Angular/Ionic la primera vez que corrió `ng`/`ionic` en esta máquina).
+  evidence: Hallazgo de review (blind-hunter) sobre este spec. Verificado que la modificación ya existía en el working tree al iniciar este spec — ruido de tooling local, no relacionado a ninguna feature. Revisar si conviene revertirla o agregar esa clave al `.gitignore`/config para que no vuelva a ensuciar diffs futuros.

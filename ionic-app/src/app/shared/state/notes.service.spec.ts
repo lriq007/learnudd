@@ -249,4 +249,68 @@ describe('NotesService', () => {
       }
     });
   });
+
+  // CAP-3 spec-cap-3-publish-note: I/O matrix "Wizard submit ok" / "Wizard
+  // submit error".
+  describe('create()', () => {
+    const input = {
+      title: 'Resumen Cálculo II',
+      description: '',
+      major: 'Ingeniería Civil Informática',
+      course: 'Cálculo II',
+      semester: '',
+      material_type: 'resumen',
+      price: 2490,
+      pages: 0,
+      ai_declaration: 'none' as const,
+      ai_details: '',
+    };
+
+    it('devuelve el error genérico cuando Supabase no está configurado (cliente null)', async () => {
+      const service = setup(null);
+
+      await expect(service.create('u1', input)).resolves.toEqual({ error: 'Error al publicar' });
+    });
+
+    it('inserta la nota con status "review", mapeando campos 1:1 (paridad handleSubmit líneas 59-72)', async () => {
+      const query = createQueryMock({ data: null, error: null });
+      const from = vi.fn(() => query);
+      const service = setup({ from });
+
+      const result = await service.create('u1', input);
+
+      expect(from).toHaveBeenCalledWith('notes');
+      expect(query.insert).toHaveBeenCalledWith({
+        author_id: 'u1',
+        title: 'Resumen Cálculo II',
+        description: null,
+        major: 'Ingeniería Civil Informática',
+        course: 'Cálculo II',
+        semester: null,
+        material_type: 'resumen',
+        price: 2490,
+        pages: null,
+        ai_declaration: 'none',
+        ai_details: null,
+        status: 'review',
+      });
+      expect(result).toEqual({ error: null });
+    });
+
+    it('cuando el insert de Supabase falla, devuelve el mismo error genérico "Error al publicar"', async () => {
+      const query = createQueryMock({ data: null, error: { message: 'insert failed' } });
+      const service = setup({ from: vi.fn(() => query) });
+
+      await expect(service.create('u1', input)).resolves.toEqual({ error: 'Error al publicar' });
+    });
+
+    it('con price 0 (apunte gratis), inserta price: 0 tal cual, no null (a diferencia de pages)', async () => {
+      const query = createQueryMock({ data: null, error: null });
+      const service = setup({ from: vi.fn(() => query) });
+
+      await service.create('u1', { ...input, price: 0 });
+
+      expect(query.insert).toHaveBeenCalledWith(expect.objectContaining({ price: 0 }));
+    });
+  });
 });

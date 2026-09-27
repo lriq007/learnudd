@@ -142,6 +142,28 @@ export const MATERIAL_TYPE_LABELS: Record<MaterialType, string> = {
   pauta_autorizada: 'Pauta Autorizada',
 };
 
+// CAP-3: SEMESTER_OPTIONS moved here from onboarding.page.ts's local const
+// now that publish-note.page.ts is a second consumer — same criterion CAP-2
+// used to move MAJOR_OPTIONS out of onboarding.page.ts. MATERIAL_TYPE_OPTIONS
+// is derived from MATERIAL_TYPE_LABELS with Object.entries, ported 1:1 from
+// src/types/index.ts (líneas 234-236).
+export const SEMESTER_OPTIONS = [
+  '1° Semestre',
+  '2° Semestre',
+  '3° Semestre',
+  '4° Semestre',
+  '5° Semestre',
+  '6° Semestre',
+  '7° Semestre',
+  '8° Semestre',
+  '9° Semestre',
+  '10° Semestre',
+] as const;
+
+export const MATERIAL_TYPE_OPTIONS = Object.entries(MATERIAL_TYPE_LABELS).map(
+  ([value, label]) => ({ value, label }),
+);
+
 export interface CartItem {
   id: string;
   type: 'note' | 'booking';

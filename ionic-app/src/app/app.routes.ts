@@ -54,19 +54,35 @@ export const routes: Routes = [
     canActivate: [protectedGuard],
   },
   {
+    // CAP-3 (resto, spec-cap-3-publish-note): Navbar's central "+" button
+    // (publishHref, CAP-7) already links here; was falling into the
+    // catch-all below until this spec built the chooser page.
+    path: 'publish',
+    loadComponent: () => import('./publish/publish.page').then((m) => m.PublishPage),
+    canActivate: [protectedGuard],
+  },
+  {
+    path: 'publish/note',
+    loadComponent: () => import('./publish-note/publish-note.page').then((m) => m.PublishNotePage),
+    canActivate: [protectedGuard],
+  },
+  {
     path: '',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
     canActivate: [protectedGuard],
     pathMatch: 'full',
   },
   {
-    // Header/Navbar link to domain routes (/messages, /profile, /publish)
+    // Header/Navbar link to domain routes (/messages, /profile, /publish/tutor)
     // that this spec doesn't create yet — catch them here instead of letting
     // the router throw "cannot match any routes". Kept pointed at /kit per
     // Code Map ("kit sigue existiendo tal cual") — this spec's Code Map
     // doesn't ask to retarget the wildcard itself. CAP-3: /library and
     // /explore/notes/:id are real routes now (registered above), no longer
-    // caught here.
+    // caught here. CAP-3 (resto, spec-cap-3-publish-note): /publish and
+    // /publish/note are real routes too now; /publish/tutor (CAP-4, "Ofrecer
+    // clases") still falls here, per Boundaries — a deliberate, already
+    // accepted pattern, not a gap this spec introduces.
     path: '**',
     redirectTo: 'kit',
   },
