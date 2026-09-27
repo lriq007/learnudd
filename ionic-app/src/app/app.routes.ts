@@ -114,20 +114,29 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    // Header/Navbar link to domain routes (/messages, /profile) that this
-    // spec doesn't create yet — catch them here instead of letting the
-    // router throw "cannot match any routes". Kept pointed at /kit per Code
-    // Map ("kit sigue existiendo tal cual") — this spec's Code Map doesn't
-    // ask to retarget the wildcard itself. CAP-3: /library and
-    // /explore/notes/:id are real routes now (registered above), no longer
-    // caught here. CAP-3 (resto, spec-cap-3-publish-note): /publish and
-    // /publish/note are real routes too now. CAP-4: /explore/tutors/:id and
-    // /bookings are real routes too now (registered above), no longer
-    // caught here. CAP-4 (resto, spec-cap-4-publish-tutor): /publish/tutor
-    // ("Ofrecer clases") is a real route too now (registered above), no
-    // longer caught here. CAP-5: /messages and /messages/:userId are real
-    // routes too now (registered above), no longer caught here — /profile
-    // is still the only domain route left falling through to this catch-all.
+    // CAP-6: Navbar's "Perfil" tab (CAP-7) already links here; was falling
+    // into the catch-all below until this spec built the page. Only
+    // /profile/creator (out of scope, deferred-work.md) stays uncaught.
+    path: 'profile',
+    loadComponent: () => import('./profile/profile.page').then((m) => m.ProfilePage),
+    canActivate: [protectedGuard],
+  },
+  {
+    // Header/Navbar link to domain routes that this spec doesn't create yet
+    // — catch them here instead of letting the router throw "cannot match
+    // any routes". Kept pointed at /kit per Code Map ("kit sigue existiendo
+    // tal cual") — this spec's Code Map doesn't ask to retarget the wildcard
+    // itself. CAP-3: /library and /explore/notes/:id are real routes now
+    // (registered above), no longer caught here. CAP-3 (resto,
+    // spec-cap-3-publish-note): /publish and /publish/note are real routes
+    // too now. CAP-4: /explore/tutors/:id and /bookings are real routes too
+    // now (registered above), no longer caught here. CAP-4 (resto,
+    // spec-cap-4-publish-tutor): /publish/tutor ("Ofrecer clases") is a real
+    // route too now (registered above), no longer caught here. CAP-5:
+    // /messages and /messages/:userId are real routes too now (registered
+    // above), no longer caught here. CAP-6: /profile is a real route too now
+    // (registered above), no longer caught here — only /profile/creator
+    // (out of scope) still falls through to this catch-all.
     path: '**',
     redirectTo: 'kit',
   },

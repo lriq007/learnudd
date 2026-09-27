@@ -19,6 +19,7 @@ import { BookingsPage } from './bookings/bookings.page';
 import { MessagesPage } from './messages/messages.page';
 import { ChatPage } from './chat/chat.page';
 import { MessagesService } from './shared/state/messages.service';
+import { ProfilePage } from './profile/profile.page';
 
 // Review fix: every other spec provides `provideRouter([])` (an empty route
 // table) or stubs `ActivatedRoute` directly, so nothing previously resolved
@@ -221,6 +222,24 @@ describe('app.routes', () => {
     const harness = await RouterTestingHarness.create();
 
     await harness.navigateByUrl('/messages/u2');
+
+    expect(router.url).toBe('/login');
+  });
+
+  it('usuario autenticado: /profile activa ProfilePage', async () => {
+    setup({ id: 'u1', onboarding_completed: true });
+    const harness = await RouterTestingHarness.create();
+
+    const component = await harness.navigateByUrl('/profile');
+
+    expect(component).toBeInstanceOf(ProfilePage);
+  });
+
+  it('sin sesión: /profile redirige a /login (protectedGuard)', async () => {
+    const { router } = setup(null);
+    const harness = await RouterTestingHarness.create();
+
+    await harness.navigateByUrl('/profile');
 
     expect(router.url).toBe('/login');
   });
