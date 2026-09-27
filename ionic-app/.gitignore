@@ -65,6 +65,14 @@ yarn-error.log
 testem.log
 /typings
 
+# Generated locally from .env.local by scripts/inject-env.mjs -- never commit
+# real Supabase credentials.
+src/environments/environment.local.ts
+
+# .env.example is a value-less template and should be tracked -- un-ignore it
+# from the root .gitignore's blanket `.env*` pattern.
+!.env.example
+
 # System files
 .DS_Store
 Thumbs.db

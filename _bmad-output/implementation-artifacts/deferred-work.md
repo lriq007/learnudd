@@ -193,3 +193,11 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-cap-6-creator-dashboard.md`
   summary: Ningún test de `profile-creator.page.spec.ts` renderiza el estado `loading()=true` (los 2 `app-skeleton` de la lista de apuntes, ninguno en el stats grid) — todos los tests esperan a que `ngOnInit()` resuelva antes de `detectChanges()`.
   evidence: Hallazgo de review (verification-gap + blind-hunter, mismo hallazgo). Es el mismo patrón que el resto del suite ya usa en cada página con `loading`/`ngOnInit` async (ninguna prueba su estado transitorio pre-resolución) — no es un gap específico de este spec, pero queda sin cerrar en todo el codebase.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-supabase-real-integration.md`
+  summary: Una navegación dura (URL directa o refresh del navegador) a cualquier ruta protegida redirige a `/login` aunque la sesión de Supabase siga persistida en `localStorage` — la navegación dentro de la SPA (clicks en la navbar) sí preserva la sesión sin problema.
+  evidence: Hallazgo de la verificación manual end-to-end en navegador real (`claude-in-chrome`) de esta spec. Parece una carrera entre el guard y la restauración async de la sesión en el bootstrap de la app; preexistente, no se tocó `auth.guard.ts` ni el bootstrap durante esta spec. No bloqueó la verificación (se evitó navegando siempre dentro de la SPA) pero sí sería un problema real para un usuario que recargue la página o abra un link directo.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-supabase-real-integration.md`
+  summary: Un mensaje de chat recién enviado no aparece en la conversación hasta salir y volver a entrar a `/messages/:userId` — el insert en Supabase es inmediato y correcto (confirmado con `read_network_requests`, POST 201) pero la UI no lo agrega ni por estado local optimista ni por eco de Supabase Realtime.
+  evidence: Hallazgo de la verificación manual end-to-end en navegador real (`claude-in-chrome`) de esta spec. Preexistente al código de esta spec — no se tocó `chat.page.ts`.
