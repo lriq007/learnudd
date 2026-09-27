@@ -16,6 +16,9 @@ import { PublishNotePage } from './publish-note/publish-note.page';
 import { PublishTutorPage } from './publish-tutor/publish-tutor.page';
 import { TutorDetailPage } from './tutor-detail/tutor-detail.page';
 import { BookingsPage } from './bookings/bookings.page';
+import { MessagesPage } from './messages/messages.page';
+import { ChatPage } from './chat/chat.page';
+import { MessagesService } from './shared/state/messages.service';
 
 // Review fix: every other spec provides `provideRouter([])` (an empty route
 // table) or stubs `ActivatedRoute` directly, so nothing previously resolved
@@ -37,6 +40,13 @@ describe('app.routes', () => {
       getRatings: vi.fn().mockResolvedValue([]),
       listForStudent: vi.fn().mockResolvedValue([]),
     };
+    const messagesServiceStub = {
+      listConversations: vi.fn().mockResolvedValue([]),
+      listForConversation: vi.fn().mockResolvedValue([]),
+      markRead: vi.fn().mockResolvedValue(undefined),
+      subscribeToConversation: vi.fn().mockReturnValue(null),
+      unsubscribe: vi.fn(),
+    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -46,6 +56,7 @@ describe('app.routes', () => {
         { provide: FavoritesService, useValue: favoritesServiceStub },
         { provide: TutorsService, useValue: tutorsServiceStub },
         { provide: BookingsService, useValue: bookingsServiceStub },
+        { provide: MessagesService, useValue: messagesServiceStub },
       ],
     });
 
@@ -174,6 +185,42 @@ describe('app.routes', () => {
     const harness = await RouterTestingHarness.create();
 
     await harness.navigateByUrl('/bookings');
+
+    expect(router.url).toBe('/login');
+  });
+
+  it('usuario autenticado: /messages activa MessagesPage', async () => {
+    setup({ id: 'u1', onboarding_completed: true });
+    const harness = await RouterTestingHarness.create();
+
+    const component = await harness.navigateByUrl('/messages');
+
+    expect(component).toBeInstanceOf(MessagesPage);
+  });
+
+  it('sin sesión: /messages redirige a /login (protectedGuard)', async () => {
+    const { router } = setup(null);
+    const harness = await RouterTestingHarness.create();
+
+    await harness.navigateByUrl('/messages');
+
+    expect(router.url).toBe('/login');
+  });
+
+  it('usuario autenticado: /messages/:userId activa ChatPage', async () => {
+    setup({ id: 'u1', onboarding_completed: true });
+    const harness = await RouterTestingHarness.create();
+
+    const component = await harness.navigateByUrl('/messages/u2');
+
+    expect(component).toBeInstanceOf(ChatPage);
+  });
+
+  it('sin sesión: /messages/:userId redirige a /login (protectedGuard)', async () => {
+    const { router } = setup(null);
+    const harness = await RouterTestingHarness.create();
+
+    await harness.navigateByUrl('/messages/u2');
 
     expect(router.url).toBe('/login');
   });

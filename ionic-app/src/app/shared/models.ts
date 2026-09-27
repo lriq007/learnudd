@@ -179,6 +179,35 @@ export interface LibraryItem {
   note?: Note;
 }
 
+// CAP-5: ported from src/types/index.ts (Message líneas 142-152) for the
+// messages/chat pages.
+export interface Message {
+  id: string;
+  sender_id: string;
+  receiver_id: string;
+  booking_id: string | null;
+  content: string;
+  read: boolean;
+  created_at: string;
+  sender?: Profile;
+  receiver?: Profile;
+}
+
+// CAP-5: local type — doesn't exist in the MVP (Design Notes). "Conversación"
+// is derived client-side by MessagesService.listConversations() by grouping
+// `messages` per counterpart; no `conversations` table exists. `unread` stays
+// a boolean flag (not a real unread count) — same gap the MVP has, per
+// Boundaries/Never (documented in deferred-work.md, not fixed here).
+// `otherUser` is narrowed to the 3 fields the join in listConversations()
+// actually selects (`id, full_name, avatar_url`) — typing it as the full
+// `Profile` would misrepresent what's actually populated at runtime.
+export interface Conversation {
+  otherUser: Pick<Profile, 'id' | 'full_name' | 'avatar_url'>;
+  lastMessage: string;
+  lastMessageTime: string;
+  unread: boolean;
+}
+
 // CAP-4 (resto, spec-cap-4-publish-tutor): ported from src/types/index.ts
 // (líneas 189-194), same criterion as MAJOR_OPTIONS below.
 export const CAMPUS_OPTIONS = [

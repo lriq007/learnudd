@@ -1,0 +1,42 @@
+<app-header [title]="headerTitle()" [showBack]="true">
+  <span slot="right-action" class="chat-header-avatar">
+    <span>{{ otherUserInitials() }}</span>
+  </span>
+</app-header>
+
+<ion-content class="chat-content">
+  <div class="chat-messages">
+    @if (loading()) {
+      <div class="chat-skeletons">
+        @for (i of skeletonRows; track i) {
+          <app-skeleton height="2.5rem" [width]="i % 2 === 0 ? '60%' : '75%'"></app-skeleton>
+        }
+      </div>
+    } @else {
+      @for (msg of messages(); track msg.id) {
+        <div class="chat-bubble-row" [class.chat-bubble-row--mine]="isMine(msg)">
+          <div class="chat-bubble" [class.chat-bubble--mine]="isMine(msg)">
+            <p class="chat-bubble__text">{{ msg.content }}</p>
+            <p class="chat-bubble__time">{{ formatRelativeTime(msg.created_at) }}</p>
+          </div>
+        </div>
+      }
+      <div #messagesEnd></div>
+    }
+  </div>
+</ion-content>
+
+<div class="chat-input-bar">
+  <div class="chat-input-row">
+    <ion-input
+      class="chat-input"
+      placeholder="Escribe un mensaje..."
+      [value]="newMessage()"
+      (ionInput)="setNewMessage($event.detail.value)"
+      (keydown)="onKeydown($event)"
+    ></ion-input>
+    <app-button (click)="send()" [disabled]="!canSend()">
+      <ion-icon [icon]="sendIcon"></ion-icon>
+    </app-button>
+  </div>
+</div>

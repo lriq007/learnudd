@@ -91,6 +91,23 @@ export const routes: Routes = [
     canActivate: [protectedGuard],
   },
   {
+    // CAP-5: Navbar's "Mensajes" tab (CAP-7), Header's notifications icon
+    // (CAP-7) and tutor-detail's message button (CAP-4) already link here;
+    // was falling into the catch-all below until this spec built the page.
+    path: 'messages',
+    loadComponent: () => import('./messages/messages.page').then((m) => m.MessagesPage),
+    canActivate: [protectedGuard],
+  },
+  {
+    // CAP-5: BookingsPage's "Chat" button (CAP-4) already links here.
+    // `:userId` (not `:id`) identifies the OTHER USER in this chat, not a
+    // conversation or message id — no `conversations` table exists (Design
+    // Notes).
+    path: 'messages/:userId',
+    loadComponent: () => import('./chat/chat.page').then((m) => m.ChatPage),
+    canActivate: [protectedGuard],
+  },
+  {
     path: '',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
     canActivate: [protectedGuard],
@@ -108,7 +125,9 @@ export const routes: Routes = [
     // /bookings are real routes too now (registered above), no longer
     // caught here. CAP-4 (resto, spec-cap-4-publish-tutor): /publish/tutor
     // ("Ofrecer clases") is a real route too now (registered above), no
-    // longer caught here.
+    // longer caught here. CAP-5: /messages and /messages/:userId are real
+    // routes too now (registered above), no longer caught here — /profile
+    // is still the only domain route left falling through to this catch-all.
     path: '**',
     redirectTo: 'kit',
   },
