@@ -1,0 +1,117 @@
+<app-header title="Ofrecer clases" [showBack]="true"></app-header>
+
+<ion-content class="publish-tutor-content">
+  <div class="publish-tutor-page">
+    <div class="publish-tutor-field">
+      <label>Bio</label>
+      <ion-textarea
+        placeholder="Cuéntanos sobre ti, tu experiencia y metodología..."
+        fill="outline"
+        [rows]="4"
+        [value]="bio()"
+        (ionInput)="setBio($event.detail.value)"
+      ></ion-textarea>
+    </div>
+
+    <app-input
+      label="Experiencia"
+      placeholder="Ej: 2 años dando clases particulares"
+      [(value)]="experience"
+    ></app-input>
+
+    <div class="publish-tutor-field">
+      <label>Modalidades</label>
+      <div class="publish-tutor-modalities">
+        @for (mod of modalityOptions; track mod) {
+          <app-button
+            [variant]="modalities().includes(mod) ? 'primary' : 'outline'"
+            [fullWidth]="true"
+            (click)="toggleModality(mod)"
+          >
+            {{ mod }}
+          </app-button>
+        }
+      </div>
+    </div>
+
+    <div class="publish-tutor-field">
+      <ion-select
+        label="Campus"
+        labelPlacement="stacked"
+        fill="outline"
+        [value]="campus()"
+        (ionChange)="setCampus($event.detail.value)"
+      >
+        @for (c of campusOptions; track c) {
+          <ion-select-option [value]="c">{{ c }}</ion-select-option>
+        }
+      </ion-select>
+    </div>
+
+    <div class="publish-tutor-field">
+      <label>Precio por hora (CLP)</label>
+      <ion-input
+        type="number"
+        fill="outline"
+        [value]="hourlyPrice()"
+        (ionInput)="setHourlyPrice($event.detail.value)"
+      ></ion-input>
+    </div>
+
+    <div class="publish-tutor-courses">
+      <div class="publish-tutor-courses__header">
+        <label>Ramos que enseñas</label>
+        <button type="button" class="publish-tutor-add" (click)="addCourse()">
+          <ion-icon [icon]="addIcon"></ion-icon>
+          Agregar
+        </button>
+      </div>
+
+      <div class="publish-tutor-courses__list">
+        @for (course of courses(); track $index) {
+          <app-card padding="sm">
+            <div class="publish-tutor-course-row">
+              <ion-input
+                placeholder="Nombre del ramo"
+                fill="outline"
+                class="publish-tutor-course-name"
+                [value]="course.course_name"
+                (ionInput)="updateCourse($index, 'course_name', $event.detail.value ?? '')"
+              ></ion-input>
+              @if (courses().length > 1) {
+                <button
+                  type="button"
+                  class="publish-tutor-remove"
+                  aria-label="Quitar ramo"
+                  (click)="removeCourse($index)"
+                >
+                  <ion-icon [icon]="closeIcon"></ion-icon>
+                </button>
+              }
+            </div>
+            <ion-select
+              placeholder="Carrera"
+              fill="outline"
+              class="publish-tutor-course-major"
+              [value]="course.major"
+              (ionChange)="updateCourse($index, 'major', $event.detail.value)"
+            >
+              @for (m of majorOptions; track m) {
+                <ion-select-option [value]="m">{{ m }}</ion-select-option>
+              }
+            </ion-select>
+          </app-card>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="publish-tutor-actions udd-safe-bottom">
+    <app-button [disabled]="!canSubmit()" [loading]="loading()" [fullWidth]="true" size="lg" (click)="submit()">
+      <ion-icon [icon]="checkIcon"></ion-icon>
+      Crear perfil de tutor
+    </app-button>
+  </div>
+</ion-content>
+
+<app-toast [(isOpen)]="toastOpen" [message]="toastMessage()" [type]="toastType()"></app-toast>

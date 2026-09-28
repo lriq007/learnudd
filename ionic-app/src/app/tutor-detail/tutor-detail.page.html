@@ -1,0 +1,184 @@
+<app-header [title]="headerTitle()" [showBack]="true"></app-header>
+
+<ion-content class="tutor-detail-content">
+  @if (loading()) {
+    <div class="tutor-detail-page">
+      <app-skeleton height="8rem"></app-skeleton>
+      <app-skeleton height="2rem" width="75%"></app-skeleton>
+      <app-skeleton height="10rem"></app-skeleton>
+    </div>
+  } @else if (!tutor()) {
+    <div class="tutor-detail-empty">
+      <p>Tutor no encontrado</p>
+    </div>
+  } @else {
+    <div class="tutor-detail-page">
+      <app-card>
+        <div class="tutor-detail-profile">
+          <div class="tutor-detail-avatar">
+            <span>{{ authorInitials() }}</span>
+          </div>
+          <div class="tutor-detail-profile__body">
+            <div class="tutor-detail-name-row">
+              <h1 class="tutor-detail-name">{{ tutor()!.user?.full_name || 'Tutor' }}</h1>
+              @if (tutor()!.verified) {
+                <app-verified-badge size="md"></app-verified-badge>
+              }
+            </div>
+            <p class="tutor-detail-meta">{{ tutor()!.user?.major }} · {{ tutor()!.user?.semester }}° Semestre</p>
+            <div class="tutor-detail-rating-row">
+              <app-rating-stars
+                [rating]="tutor()!.average_rating || 0"
+                size="md"
+                [showValue]="true"
+                [showCount]="true"
+                [count]="tutor()!.ratings_count || 0"
+              ></app-rating-stars>
+            </div>
+          </div>
+        </div>
+
+        <div class="tutor-detail-stats">
+          <div class="tutor-detail-stat">
+            <p class="tutor-detail-stat__value">{{ tutor()!.total_classes }}</p>
+            <p class="tutor-detail-stat__label">Clases</p>
+          </div>
+          <div class="tutor-detail-stat">
+            <p class="tutor-detail-stat__value">{{ formatCLP(tutor()!.hourly_price) }}</p>
+            <p class="tutor-detail-stat__label">Por hora</p>
+          </div>
+          <div class="tutor-detail-stat">
+            <p class="tutor-detail-stat__value">{{ tutor()!.modalities.length }}</p>
+            <p class="tutor-detail-stat__label">Modalidades</p>
+          </div>
+        </div>
+      </app-card>
+
+      @if (tutor()!.bio) {
+        <app-card>
+          <h3 class="tutor-detail-section-title">Acerca de</h3>
+          <p class="tutor-detail-bio">{{ tutor()!.bio }}</p>
+        </app-card>
+      }
+
+      <app-card>
+        <h3 class="tutor-detail-section-title">Modalidades</h3>
+        <div class="tutor-detail-badges">
+          @if (isPresencial()) {
+            <app-badge variant="primary" size="md">
+              <ion-icon [icon]="businessIcon"></ion-icon>
+              Presencial
+            </app-badge>
+          }
+          @if (isOnline()) {
+            <app-badge variant="primary" size="md">
+              <ion-icon [icon]="videoIcon"></ion-icon>
+              En línea
+            </app-badge>
+          }
+        </div>
+        <div class="tutor-detail-campus">
+          <ion-icon [icon]="locationIcon"></ion-icon>
+          Campus {{ tutor()!.campus }}
+        </div>
+      </app-card>
+
+      @if (tutor()!.courses && tutor()!.courses!.length > 0) {
+        <app-card>
+          <h3 class="tutor-detail-section-title">Ramos que enseña</h3>
+          <div class="tutor-detail-badges">
+            @for (course of tutor()!.courses!; track course.id) {
+              <app-badge variant="default" size="md">
+                <ion-icon [icon]="schoolIcon"></ion-icon>
+                {{ course.course_name }}
+              </app-badge>
+            }
+          </div>
+        </app-card>
+      }
+
+      <app-card>
+        <h3 class="tutor-detail-section-title tutor-detail-section-title--icon">
+          <ion-icon [icon]="calendarIcon" class="tutor-detail-calendar-icon"></ion-icon>
+          Horarios disponibles
+        </h3>
+        @if (schedules().length > 0) {
+          <div class="tutor-detail-schedules">
+            @for (schedule of schedules(); track schedule.id) {
+              <button
+                type="button"
+                class="tutor-detail-schedule"
+                [class.tutor-detail-schedule--selected]="selectedSchedule() === schedule.id"
+                (click)="selectSchedule(schedule.id)"
+              >
+                <div class="tutor-detail-schedule__row">
+                  <div>
+                    <p class="tutor-detail-schedule__date">{{ formatScheduleDate(schedule.date) }}</p>
+                    <p class="tutor-detail-schedule__time">
+                      <ion-icon [icon]="timeIcon"></ion-icon>
+                      {{ formatTime(schedule.start_time) }} - {{ formatTime(schedule.end_time) }}
+                    </p>
+                  </div>
+                  @if (selectedSchedule() === schedule.id) {
+                    <ion-icon [icon]="checkIcon" class="tutor-detail-schedule__check"></ion-icon>
+                  }
+                </div>
+              </button>
+            }
+          </div>
+        } @else {
+          <p class="tutor-detail-empty-text">No hay horarios disponibles por el momento</p>
+        }
+      </app-card>
+
+      <div class="tutor-detail-reviews">
+        <h3 class="tutor-detail-section-title tutor-detail-section-title--icon">
+          <ion-icon [icon]="starIcon" class="tutor-detail-star-icon"></ion-icon>
+          Opiniones ({{ ratings().length }})
+        </h3>
+        @if (ratings().length > 0) {
+          <div class="tutor-detail-reviews-list">
+            @for (rating of visibleRatings(); track rating.id) {
+              <app-card padding="sm">
+                <div class="tutor-detail-review">
+                  <div class="tutor-detail-review__avatar">
+                    <span>{{ getInitials(rating.user?.full_name || 'U') }}</span>
+                  </div>
+                  <div class="tutor-detail-review__body">
+                    <div class="tutor-detail-review__header">
+                      <span class="tutor-detail-review__name">{{ rating.user?.full_name || 'Usuario' }}</span>
+                      @if (rating.verified_class) {
+                        <app-badge variant="primary" size="sm">
+                          <ion-icon [icon]="checkIcon"></ion-icon>
+                          Clase realizada
+                        </app-badge>
+                      }
+                    </div>
+                    <app-rating-stars [rating]="rating.rating" size="sm" [showValue]="false"></app-rating-stars>
+                    @if (rating.comment) {
+                      <p class="tutor-detail-review__comment">{{ rating.comment }}</p>
+                    }
+                  </div>
+                </div>
+              </app-card>
+            }
+          </div>
+        } @else {
+          <p class="tutor-detail-empty-text">Aún no hay opiniones para este tutor</p>
+        }
+      </div>
+    </div>
+
+    <div class="tutor-detail-actions">
+      <app-button variant="outline" (click)="goToMessages()" class="tutor-detail-message">
+        <ion-icon [icon]="chatIcon"></ion-icon>
+      </app-button>
+      <app-button (click)="handleBooking()" [loading]="booking()" [disabled]="!selectedSchedule()" size="lg" class="tutor-detail-book">
+        <ion-icon [icon]="calendarIcon"></ion-icon>
+        Reservar horario
+      </app-button>
+    </div>
+  }
+</ion-content>
+
+<app-toast [(isOpen)]="toastOpen" [message]="toastMessage()" [type]="toastType()"></app-toast>

@@ -1,0 +1,111 @@
+<app-header title="Panel del creador" [showBack]="true">
+  <app-button slot="right-action" size="sm" routerLink="/publish">
+    <ion-icon [icon]="addIcon"></ion-icon>
+    Nuevo
+  </app-button>
+</app-header>
+
+<ion-content class="creator-content">
+  <div class="creator-page">
+    <div class="creator-stats">
+      <app-card padding="sm">
+        <div class="creator-stats__header">
+          <ion-icon [icon]="cashIcon" class="creator-stats__icon creator-stats__icon--blue"></ion-icon>
+          <span class="creator-stats__label">Ingresos</span>
+        </div>
+        <p class="creator-stats__value">{{ formatCLP(stats().totalRevenue) }}</p>
+      </app-card>
+      <app-card padding="sm">
+        <div class="creator-stats__header">
+          <ion-icon [icon]="trendingUpIcon" class="creator-stats__icon creator-stats__icon--sky"></ion-icon>
+          <span class="creator-stats__label">Ventas</span>
+        </div>
+        <p class="creator-stats__value">{{ stats().totalSales }}</p>
+      </app-card>
+      <app-card padding="sm">
+        <div class="creator-stats__header">
+          <ion-icon [icon]="peopleIcon" class="creator-stats__icon creator-stats__icon--gold"></ion-icon>
+          <span class="creator-stats__label">Reservas</span>
+        </div>
+        <p class="creator-stats__value">{{ stats().totalBookings }}</p>
+      </app-card>
+      <app-card padding="sm">
+        <div class="creator-stats__header">
+          <ion-icon [icon]="starIcon" class="creator-stats__icon creator-stats__icon--gold"></ion-icon>
+          <span class="creator-stats__label">Calificación</span>
+        </div>
+        <p class="creator-stats__value">{{ stats().averageRating > 0 ? stats().averageRating.toFixed(1) : '-' }}</p>
+      </app-card>
+    </div>
+
+    <div class="creator-notes">
+      <div class="creator-notes__header">
+        <h2 class="creator-notes__title">
+          <ion-icon [icon]="bookIcon"></ion-icon>
+          Mis apuntes ({{ notes().length }})
+        </h2>
+        <a routerLink="/publish/note" class="creator-notes__add">+ Nuevo</a>
+      </div>
+
+      @if (loading()) {
+        <div class="creator-notes__list">
+          @for (i of skeletonRows; track i) {
+            <app-skeleton height="5rem"></app-skeleton>
+          }
+        </div>
+      } @else if (notes().length > 0) {
+        <div class="creator-notes__list">
+          @for (note of notes(); track note.id) {
+            <app-card padding="sm">
+              <div class="creator-notes__item">
+                <div class="creator-notes__item-icon">
+                  <ion-icon [icon]="bookIcon"></ion-icon>
+                </div>
+                <div class="creator-notes__item-info">
+                  <h3 class="creator-notes__item-title">{{ note.title }}</h3>
+                  <p class="creator-notes__item-course">{{ note.course }}</p>
+                </div>
+                <div class="creator-notes__item-meta">
+                  <app-badge [variant]="noteBadgeVariant(note.status)" size="sm">{{ statusLabels[note.status] }}</app-badge>
+                  <p class="creator-notes__item-sales">{{ note.downloads }} ventas</p>
+                </div>
+              </div>
+            </app-card>
+          }
+        </div>
+      } @else {
+        <app-empty-state title="Aún no has publicado apuntes" description="Comparte tus apuntes y empieza a generar ingresos">
+          <span slot="icon">
+            <ion-icon [icon]="bookIcon"></ion-icon>
+          </span>
+          <span slot="action">
+            <app-button size="sm" routerLink="/publish/note">Publicar primer apunte</app-button>
+          </span>
+        </app-empty-state>
+      }
+    </div>
+
+    @if (tutorProfile()) {
+      <div class="creator-tutor">
+        <h2 class="creator-tutor__title">
+          <ion-icon [icon]="peopleIcon"></ion-icon>
+          Perfil de tutor
+        </h2>
+        <app-card>
+          <div class="creator-tutor__row">
+            <div class="creator-tutor__icon">
+              <ion-icon [icon]="peopleIcon"></ion-icon>
+            </div>
+            <div class="creator-tutor__info">
+              <p class="creator-tutor__courses">
+                {{ tutorProfile()?.courses?.length || 0 }} ramos · {{ tutorProfile()?.total_classes }} clases
+              </p>
+              <p class="creator-tutor__price">{{ formatCLP(tutorProfile()?.hourly_price || 0) }}/hora</p>
+            </div>
+            <app-rating-stars [rating]="tutorProfile()?.average_rating || 0" size="sm"></app-rating-stars>
+          </div>
+        </app-card>
+      </div>
+    }
+  </div>
+</ion-content>

@@ -1,0 +1,221 @@
+.profile-content {
+  --background: var(--ion-background-color);
+}
+
+.profile-page {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 24px 16px 96px; // clear the fixed Navbar + safe-bottom
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--udd-radius-full);
+  background: rgba(6, 43, 79, 0.1); // udd-deep/10
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-avatar__initials {
+  font-size: 1.125rem; // text-xl
+  font-weight: 700;
+  color: var(--udd-deep);
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 1.125rem; // text-lg
+  font-weight: 700;
+  color: var(--udd-graphite);
+}
+
+.profile-major {
+  margin: 2px 0 0;
+  font-size: 0.875rem; // text-sm
+  color: var(--udd-gray);
+}
+
+.profile-email {
+  margin: 2px 0 0;
+  font-size: 0.75rem; // text-xs
+  color: var(--udd-gray);
+}
+
+.profile-edit-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+
+  app-button {
+    flex: 1;
+  }
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--udd-border-color);
+}
+
+.profile-stats__item {
+  text-align: center;
+}
+
+.profile-stats__value {
+  margin: 0;
+  font-size: 1.125rem; // text-lg
+  font-weight: 700;
+  color: var(--udd-blue);
+}
+
+.profile-stats__label {
+  margin: 2px 0 0;
+  font-size: 0.75rem; // text-xs
+  color: var(--udd-gray);
+}
+
+// Ported from profile/page.tsx's "Modo creador" card (líneas 132-144):
+// `bg-gradient-to-r from-udd-deep to-udd-blue text-white`. Same ::ng-deep
+// technique as .profile-logout below (and login.page.scss) to reach into
+// CardComponent's inner ion-card, since a `class` attribute on <app-card>
+// lands on its host element, not on the ion-card its own template renders.
+.profile-creator-link {
+  display: block;
+  text-decoration: none;
+}
+
+.profile-creator-card {
+  ::ng-deep .app-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(to right, var(--udd-deep), var(--udd-blue));
+    color: #ffffff;
+  }
+}
+
+.profile-creator-card__icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.profile-creator-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-creator-card__title {
+  margin: 0;
+  font-size: 0.875rem; // text-sm
+  font-weight: 600;
+}
+
+.profile-creator-card__subtitle {
+  margin: 2px 0 0;
+  font-size: 0.75rem; // text-xs
+  color: rgba(255, 255, 255, 0.7); // text-white/70
+}
+
+.profile-creator-card__chevron {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.profile-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px; // py-3.5 px-4
+  border-bottom: 1px solid var(--udd-border-color);
+  text-decoration: none;
+  transition: background-color var(--udd-duration-fast) ease;
+
+  &:hover {
+    background: rgba(100, 116, 139, 0.05); // udd-gray/5
+  }
+}
+
+.profile-menu__item--last {
+  border-bottom: none;
+}
+
+.profile-menu__icon {
+  font-size: 20px;
+}
+
+.profile-menu__icon--blue {
+  color: var(--udd-blue);
+}
+
+.profile-menu__icon--red {
+  color: var(--ion-color-danger);
+}
+
+.profile-menu__icon--gold {
+  color: var(--udd-gold);
+}
+
+.profile-menu__icon--sky {
+  color: var(--udd-sky);
+}
+
+.profile-menu__icon--gray {
+  color: var(--udd-gray);
+}
+
+.profile-menu__label {
+  flex: 1;
+  font-size: 0.875rem; // text-sm
+  font-weight: 500;
+  color: var(--udd-graphite);
+}
+
+.profile-menu__chevron {
+  font-size: 16px;
+  color: var(--udd-gray);
+}
+
+// Ported from profile/page.tsx's "text-red-500" override on top of Button's
+// own ghost variant (Design Notes: same ::ng-deep technique login.page.scss
+// already uses to reach into ButtonComponent's ion-button).
+.profile-logout {
+  ::ng-deep .app-button {
+    --color: var(--ion-color-danger);
+  }
+
+  ion-icon {
+    margin-right: 8px;
+  }
+}

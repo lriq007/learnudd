@@ -1,0 +1,43 @@
+<app-header title="Mensajes"></app-header>
+
+<ion-content class="messages-content">
+  <div class="messages-page">
+    @if (loading()) {
+      <div class="messages-list">
+        @for (i of skeletonRows; track i) {
+          <app-skeleton height="4.5rem"></app-skeleton>
+        }
+      </div>
+    } @else if (conversations().length > 0) {
+      <div class="messages-list">
+        @for (conv of conversations(); track conv.otherUser.id) {
+          <a [routerLink]="['/messages', conv.otherUser.id]" class="messages-item-link">
+            <app-card class="messages-item">
+              <div class="messages-item__avatar">
+                <span>{{ getInitials(conv.otherUser.full_name || 'U') }}</span>
+              </div>
+              <div class="messages-item__body">
+                <div class="messages-item__row">
+                  <h3 class="messages-item__name">{{ conv.otherUser.full_name || 'Usuario' }}</h3>
+                  <span class="messages-item__time">{{ formatRelativeTime(conv.lastMessageTime) }}</span>
+                </div>
+                <p class="messages-item__preview">{{ conv.lastMessage }}</p>
+              </div>
+              @if (conv.unread) {
+                <app-badge variant="primary" size="sm">Nuevo</app-badge>
+              }
+            </app-card>
+          </a>
+        }
+      </div>
+    } @else {
+      <app-empty-state title="No tienes mensajes" description="Los mensajes aparecerán aquí cuando coordines con tutores o compradores">
+        <span slot="icon">
+          <ion-icon [icon]="chatIcon"></ion-icon>
+        </span>
+      </app-empty-state>
+    }
+  </div>
+</ion-content>
+
+<app-navbar></app-navbar>

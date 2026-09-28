@@ -1,0 +1,106 @@
+.publish-tutor-content {
+  --background: var(--ion-background-color);
+
+  --padding-bottom: 96px;
+}
+
+.publish-tutor-page {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.publish-tutor-field {
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--udd-graphite);
+    margin-bottom: 6px;
+  }
+}
+
+.publish-tutor-modalities {
+  display: flex;
+  gap: 8px;
+}
+
+.publish-tutor-courses {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.publish-tutor-courses__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--udd-graphite);
+  }
+}
+
+.publish-tutor-add {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--udd-blue);
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 14px;
+  }
+}
+
+.publish-tutor-courses__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.publish-tutor-course-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.publish-tutor-course-name {
+  flex: 1;
+}
+
+.publish-tutor-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: none;
+  border: none;
+  color: var(--udd-gray);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--ion-color-danger);
+  }
+}
+
+.publish-tutor-actions {
+  position: sticky;
+  bottom: 0;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-top: 1px solid var(--udd-border-color);
+  max-width: 430px;
+  margin: 0 auto;
+}
