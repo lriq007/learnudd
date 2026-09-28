@@ -23,6 +23,7 @@ export const routes: Routes = [
     loadComponent: () => import('./onboarding/onboarding.page').then((m) => m.OnboardingPage),
     canActivate: [protectedGuard],
   },
+  
   {
     path: 'kit',
     loadComponent: () => import('./kit/kit.page').then((m) => m.KitPage),
@@ -32,6 +33,41 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'kit',
     pathMatch: 'full',
+  },
+  {
+    path: 'publish/tutor',
+    loadComponent: () => import('./publish-tutor/publish-tutor.page').then((m) => m.PublishTutorPage),
+    canActivate: [protectedGuard],
+  },
+  {
+    path: 'explore/tutors/:id',
+    loadComponent: () => import('./tutor-detail/tutor-detail.page').then((m) => m.TutorDetailPage),
+    canActivate: [protectedGuard],
+  },
+  {
+    path: 'bookings',
+    loadComponent: () => import('./bookings/bookings.page').then((m) => m.BookingsPage),
+    canActivate: [protectedGuard],
+  },
+  {
+    path: 'messages',
+    loadComponent: () => import('./messages/messages.page').then((m) => m.MessagesPage),
+    canActivate: [protectedGuard],
+  },
+  {
+    path: 'messages/:userId',
+    loadComponent: () => import('./chat/chat.page').then((m) => m.ChatPage),
+    canActivate: [protectedGuard],
+  },
+  {
+    path: 'profile',
+    loadComponent: () => import('./profile/profile.page').then((m) => m.ProfilePage),
+    canActivate: [protectedGuard],
+  },
+  {
+    path: 'profile/creator',
+    loadComponent: () => import('./profile-creator/profile-creator.page').then((m) => m.ProfileCreatorPage),
+    canActivate: [protectedGuard],
   },
   {
     // Header/Navbar link to domain routes (/messages, /library, /explore,

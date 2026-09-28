@@ -1,0 +1,107 @@
+.chat-content {
+  --background: var(--ion-background-color);
+}
+
+.chat-messages {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 16px 16px 96px; // clear the fixed input bar
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-bubble-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.chat-bubble-row--mine {
+  justify-content: flex-end;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  padding: 10px 16px;
+  border-radius: var(--udd-radius-xl);
+  border-bottom-left-radius: 6px;
+  background: #ffffff;
+  box-shadow: var(--udd-shadow-sm);
+}
+
+.chat-bubble--mine {
+  background: var(--udd-blue);
+  color: #ffffff;
+  border-bottom-left-radius: var(--udd-radius-xl);
+  border-bottom-right-radius: 6px;
+  box-shadow: none;
+}
+
+.chat-bubble__text {
+  font-size: 0.875rem;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.chat-bubble__time {
+  font-size: 0.625rem;
+  margin: 4px 0 0;
+  color: var(--udd-gray);
+}
+
+.chat-bubble--mine .chat-bubble__time {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.chat-header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--udd-radius-full);
+  background: rgba(var(--ion-color-secondary-rgb), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--udd-deep);
+  }
+}
+
+.chat-input-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-top: 1px solid var(--udd-border-color);
+}
+
+.chat-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+.chat-input {
+  flex: 1;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --background: rgba(var(--ion-color-medium-rgb), 0.05);
+  --border-radius: var(--udd-radius-lg);
+  --color: var(--udd-graphite);
+  border-radius: var(--udd-radius-lg);
+  font-size: 0.875rem;
+}

@@ -1,0 +1,103 @@
+<app-header title="Mi perfil"></app-header>
+
+<ion-content class="profile-content">
+  <div class="profile-page">
+    <app-card>
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <span class="profile-avatar__initials">{{ getInitials(user()?.full_name || 'Estudiante UDD') }}</span>
+        </div>
+        <div class="profile-info">
+          @if (!editing()) {
+            <div class="profile-name-row">
+              <h1 class="profile-name">{{ user()?.full_name || 'Estudiante UDD' }}</h1>
+              @if (user()?.verified) {
+                <app-verified-badge size="sm"></app-verified-badge>
+              }
+            </div>
+            <p class="profile-major">{{ user()?.major || 'Carrera no especificada' }}</p>
+            <p class="profile-email">{{ user()?.email }}</p>
+          } @else {
+            <div class="profile-edit-fields">
+              <app-input label="Nombre completo" [(value)]="fullNameDraft"></app-input>
+              <app-input label="Carrera" [(value)]="majorDraft"></app-input>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="profile-edit-actions">
+        @if (!editing()) {
+          <app-button variant="outline" size="sm" (click)="startEditing()">Editar perfil</app-button>
+        } @else {
+          <app-button variant="outline" size="sm" [disabled]="loading()" (click)="cancelEditing()">
+            Cancelar
+          </app-button>
+          <app-button size="sm" [disabled]="!canSave()" [loading]="loading()" (click)="saveProfile()">
+            Guardar
+          </app-button>
+        }
+      </div>
+
+      <div class="profile-stats">
+        <div class="profile-stats__item">
+          <p class="profile-stats__value">{{ stats().library }}</p>
+          <p class="profile-stats__label">Compras</p>
+        </div>
+        <div class="profile-stats__item">
+          <p class="profile-stats__value">{{ stats().favorites }}</p>
+          <p class="profile-stats__label">Favoritos</p>
+        </div>
+        <div class="profile-stats__item">
+          <p class="profile-stats__value">{{ stats().notesPublished }}</p>
+          <p class="profile-stats__label">Publicados</p>
+        </div>
+      </div>
+    </app-card>
+
+    <a routerLink="/profile/creator" class="profile-creator-link">
+      <app-card class="profile-creator-card">
+        <ion-icon [icon]="trendingUpIcon" class="profile-creator-card__icon"></ion-icon>
+        <div class="profile-creator-card__info">
+          <p class="profile-creator-card__title">Modo creador</p>
+          <p class="profile-creator-card__subtitle">Gestiona tus publicaciones y clases</p>
+        </div>
+        <ion-icon [icon]="chevronIcon" class="profile-creator-card__chevron"></ion-icon>
+      </app-card>
+    </a>
+
+    <app-card padding="none" class="profile-menu">
+      @for (item of menuItems; track item.label; let last = $last) {
+        @if (item.href === '#') {
+          <a class="profile-menu__item" [class.profile-menu__item--last]="last" href="#" (click)="$event.preventDefault()">
+            <ion-icon [icon]="item.icon" [class]="'profile-menu__icon ' + item.colorClass"></ion-icon>
+            <span class="profile-menu__label">{{ item.label }}</span>
+            <ion-icon [icon]="chevronIcon" class="profile-menu__chevron"></ion-icon>
+          </a>
+        } @else {
+          <a class="profile-menu__item" [class.profile-menu__item--last]="last" [routerLink]="item.href">
+            <ion-icon [icon]="item.icon" [class]="'profile-menu__icon ' + item.colorClass"></ion-icon>
+            <span class="profile-menu__label">{{ item.label }}</span>
+            <ion-icon [icon]="chevronIcon" class="profile-menu__chevron"></ion-icon>
+          </a>
+        }
+      }
+    </app-card>
+
+    <div class="profile-logout">
+      <app-button variant="ghost" [fullWidth]="true" (click)="signOut()">
+        <ion-icon [icon]="logOutIcon"></ion-icon>
+        Cerrar sesión
+      </app-button>
+    </div>
+  </div>
+</ion-content>
+
+<app-navbar></app-navbar>
+
+<app-toast
+  [(isOpen)]="toastOpen"
+  [message]="toastMessage()"
+  [type]="toastType()"
+  [positionAnchor]="navbarAnchorId"
+></app-toast>
