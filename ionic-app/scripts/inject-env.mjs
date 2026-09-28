@@ -31,6 +31,13 @@ loadDotenv({ path: join(projectRoot, '.env.local') });
 const supabaseUrl = process.env['SUPABASE_URL'] ?? '';
 const supabaseAnonKey = process.env['SUPABASE_ANON_KEY'] ?? '';
 
+// npm sets `npm_lifecycle_event` to the name of the script currently running.
+// `prebuild` (npm run build -> production, the config Vercel/CAP-8 uses) means
+// a real production build; `prestart` (npm start -> ng serve --configuration
+// local) means local dev. This is the only build-target signal available to
+// this script, since it runs before Angular CLI applies fileReplacements.
+const isProductionBuild = process.env['npm_lifecycle_event'] === 'prebuild';
+
 const outputPath = join(projectRoot, 'src/environments/environment.local.ts');
 
 // Escape backslashes and single quotes so the interpolated values can't break
@@ -44,7 +51,7 @@ const contents = `// GENERATED FILE -- do not edit by hand.
 // Gitignored: see ionic-app/.gitignore.
 
 export const environment = {
-  production: false,
+  production: ${isProductionBuild},
   supabaseUrl: '${escapeForSingleQuotedString(supabaseUrl)}',
   supabaseAnonKey: '${escapeForSingleQuotedString(supabaseAnonKey)}',
 };

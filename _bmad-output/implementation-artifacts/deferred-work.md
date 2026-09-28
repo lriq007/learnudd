@@ -201,3 +201,11 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-supabase-real-integration.md`
   summary: Un mensaje de chat recién enviado no aparece en la conversación hasta salir y volver a entrar a `/messages/:userId` — el insert en Supabase es inmediato y correcto (confirmado con `read_network_requests`, POST 201) pero la UI no lo agrega ni por estado local optimista ni por eco de Supabase Realtime.
   evidence: Hallazgo de la verificación manual end-to-end en navegador real (`claude-in-chrome`) de esta spec. Preexistente al código de esta spec — no se tocó `chat.page.ts`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-8-vercel-supabase-env.md`
+  summary: `notas/09-ionic-angular-sistema.md` quedó desactualizado por este fix — sigue listando `environment.prod.ts` como archivo existente/trackeado (árbol de directorios y §5.2) y su diagrama de fileReplacements (§ sobre configuraciones) solo muestra `"local"` apuntando a `environment.local.ts`, sin mencionar que `"production"` (la que usa `ng build`/Vercel) sigue ahora el mismo camino. Tampoco menciona este spec en su tabla de "mapa de documentos y specs relacionados" (§14).
+  evidence: Hallazgo de review (blind-hunter) sobre CAP-8. `notas/09-ionic-angular-sistema.md` es un archivo de trabajo en curso del usuario (no trackeado en git antes de este spec, fuera del alcance de este fix); no se editó para no interferir con ese trabajo en curso.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-cap-8-vercel-supabase-env.md`
+  summary: `notas/09-ionic-angular-sistema.md` §13 (guía de deploy a Vercel), paso 3, indica configurar el Output Directory como `dist/<nombre-del-proyecto>/browser`, pero el `outputPath` real en `ionic-app/angular.json` es `{"base": "www", "browser": ""}` — seguir la guía tal como está escrita dejaría el Output Directory mal configurado.
+  evidence: Hallazgo de review (blind-hunter) sobre CAP-8. Error preexistente en la guía, no causado por este fix; no se tocó `notas/09-ionic-angular-sistema.md` (archivo de trabajo en curso del usuario, fuera del alcance de este spec).
